@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Container, SendIcon } from "./styles";
+import { Container, SendIcon, ClipIcon, MenuIcon } from "./styles";
 import send from "../../assets/icons/send.svg";
+import clip from "../../assets/icons/clip.svg";
+import menu from "../../assets/icons/menu.svg";
 
 const mensagens = [
   {
@@ -32,20 +34,32 @@ const mensagens = [
 
 const Chat = () => {
 
-    const usermessageRef = useRef();
+    const messageInputRef = useRef(null);
+    const fileInputRef = useRef(null);
 
     const [messages, setMessages] = useState([]);
 
     const handleSubmit = () => {
-        console.log("oi")
+        console.log(fileInputRef.current.value);
     }
 
+    const handleOpenMenu = () => {
+
+    };
+
+    // const handleFileChange = (event) => {
+    // // Get the first file from the selected files list
+    //   const file = event.target.files[0];
+    //   setSelectedFile(file); // Update state with the selected file
+    // };
+
     useEffect(() => {
-        setMessages(mensagens)
+      setMessages(mensagens);
     }, [])
 
     return(
         <Container>
+            <MenuIcon src={menu} fill="#FFFcF2" onClick={() => handleOpenMenu()}/>
             <div className="chat">
                 {messages.map((message, index) => (
                     <div className={`message-container ${message.is_mine && 'message-mine'}`} key={index}>
@@ -55,7 +69,13 @@ const Chat = () => {
                 ))}
             </div>
             <div className="input-container">
-                <input type="text" placeholder="Message" ref={usermessageRef}/>
+                <div>
+                  <label>
+                    <ClipIcon src={clip} fill="#FFFcF2" />
+                    <input className="hidden-input" type="file" accept="image/*" ref={fileInputRef} />
+                  </label>
+                  <input type="text" placeholder="Message" ref={messageInputRef}/>
+                </div>
                 <button onClick={() => handleSubmit()}>
                     <SendIcon src={send} fill="#FFFcF2"/>
                 </button>

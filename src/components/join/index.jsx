@@ -4,7 +4,7 @@ import login from "../../assets/icons/login.svg";
 
 const Join = () => {
 
-    const usernameRef = useRef();
+    const usernameRef = useRef(null);
 
     const [isLoading, setIsLoading] = useState(false);
 

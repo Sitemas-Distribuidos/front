@@ -1,10 +1,9 @@
 import styled from "styled-components";
 import SVG from "react-inlinesvg";
 import colors from "../../utils/colors";
-import clip from "../../assets/icons/clip.svg"
 
 export const Container = styled.main`   
-    align-items: center;
+    align-items: flex-start;
     background: ${colors.secondary};
     box-shadow: 5px 5px 17px 1px rgba(0, 0, 0, 0.3);
     color: #000;
@@ -44,17 +43,27 @@ export const Container = styled.main`
         display: flex;
         width: 100%;
 
-        input {
-            background-color: ${colors.secondary};
-            /* background-image: url(${clip});
-            background-position: left;
-            background-repeat: no-repeat;
-            background-size: 20px; */
-            border: none;
-            border-bottom: 2px solid ${colors.primary};
-            color: ${colors.primary};
-            outline: none;
+        div {
+            align-items: flex-end;
+            display: flex;
             width: 100%;
+
+            input {
+                background: ${colors.secondary};
+                border: none;
+                border-bottom: 2px solid ${colors.primary};
+                color: ${colors.primary};
+                outline: none;
+                width: 100%;
+            }
+            
+            label {
+                display: inline-block;
+            }
+
+            .hidden-input{
+                display: none;
+            }
         }
 
         button {
@@ -70,10 +79,32 @@ export const Container = styled.main`
     }
 `;
 
+export const MenuIcon = styled(SVG)` 
+    cursor: pointer;
+    height: 28px;
+    width: 28px;
+
+    & path {
+        fill: ${({ fill }) => fill};
+    }
+`;
+
+export const ClipIcon = styled(SVG)`   
+    border-bottom: 2px solid ${colors.primary};
+    cursor: pointer;
+    height: 28px;
+    padding-bottom: 4px;
+    width: 28px;
+
+    & path {
+        fill: ${({ fill }) => fill};
+    }
+`;
+
 export const SendIcon = styled(SVG)`   
-    height: 24px;
+    height: 28px;
     margin-left: 10px;
-    width: 24px;
+    width: 28px;
 
     & path {
         fill: ${({ fill }) => fill};
