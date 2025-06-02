@@ -3,6 +3,7 @@ import Join from "../../components/join";
 import { Container } from "./styles";
 
 const Home = () => {
+    document.title = "Chat"
     return ( 
         <Container>
             {/* <Join/> */}
