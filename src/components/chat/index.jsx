@@ -1,8 +1,14 @@
+/* ⚛ REACT */
 import React, { useEffect, useRef, useState } from "react";
+
+/* 🧩 COMPONENTS */
+import Menu from "../menu";
+
+/* 📁 ASSETS*/
+import { send, clip, menu } from "../../assets/icons";
+
+/* 🎨 STYLES */
 import { Container, SendIcon, ClipIcon, MenuIcon } from "./styles";
-import send from "../../assets/icons/send.svg";
-import clip from "../../assets/icons/clip.svg";
-import menu from "../../assets/icons/menu.svg";
 
 const mensagens = [
   {
@@ -59,7 +65,11 @@ const Chat = () => {
 
     return(
         <Container>
-            <MenuIcon src={menu} fill="#FFFcF2" onClick={() => handleOpenMenu()}/>
+            <Menu />
+            <div className="chat-conatiner">
+              <div>
+              <MenuIcon src={menu} fill="#FFFcF2" onClick={() => handleOpenMenu()}/>
+            </div>
             <div className="chat">
                 {messages.map((message, index) => (
                     <div className={`message-container ${message.is_mine && 'message-mine'}`} key={index}>
@@ -79,6 +89,7 @@ const Chat = () => {
                 <button onClick={() => handleSubmit()}>
                     <SendIcon src={send} fill="#FFFcF2"/>
                 </button>
+            </div>
             </div>
         </Container>
     );
