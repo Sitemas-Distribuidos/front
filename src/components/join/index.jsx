@@ -1,6 +1,11 @@
+/* ⚛ REACT */
 import React, { useRef, useState } from "react";
+
+/* 📁 ASSETS*/
+import { login } from "../../assets/icons";
+
+/* 🎨 STYLES */
 import { Container, LoginIcon } from "./styles";
-import login from "../../assets/icons/login.svg";
 
 const Join = () => {
 
