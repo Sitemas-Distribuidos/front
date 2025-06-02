@@ -1,0 +1,12 @@
+import close from "./close.svg";
+import add from "./add.svg";
+import logout from "./logout.svg";
+import group from "./group.svg";
+import person from "./person.svg";
+import login from "./login.svg";
+import clip from "./clip.svg";
+import menu from "./menu.svg";
+import send from "./send.svg";
+import search from "./search.svg";
+
+export { close, add, logout, group, person, login, clip, menu, send, search }
