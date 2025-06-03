@@ -51,8 +51,18 @@ export const Container = styled.div`
             list-style: none;
             padding: 10px;
             width: 100%;    
+            align-items:center
         }
     }
+`;
+
+export const IconCircle = styled.div`
+  background-color: #ccd1d9;
+  border-radius: 50%;
+  padding: 6px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 export const CloseIcon = styled(SVG)`  

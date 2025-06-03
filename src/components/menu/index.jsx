@@ -5,7 +5,9 @@ import React, { useEffect, useRef, useState } from "react";
 import { close, add, logout, group, person, search } from "../../assets/icons";
 
 /* 🎨 STYLES */
-import {  Container, CloseIcon, AddIcon, LogoutIcon, ChatIcon, SearchIcon } from "./styles";
+import {  Container, CloseIcon, AddIcon, LogoutIcon, ChatIcon, SearchIcon, IconCircle } from "./styles";
+
+import { fetchUsersWebSocket } from "../../API/UserSocket/UserImporter";
 
 const contatos = [
   {
@@ -26,25 +28,40 @@ const Menu = () => {
     const searchInputRef = useRef(null);
 
     const [contacts, setContacts] = useState([]);
+    const [filteredContacts, setFilteredContacts] = useState([]);
     const [searchChat, setSearchChat] = useState('');
-
-    console.log(searchChat, searchInputRef)
-
-    useEffect(() => {
-        setContacts(contatos);
-    }, []);
-
-    useEffect(() => {
-        setContacts(contacts.filter(item => item.toLowerCase().includes(searchChat.toLowerCase())));
-    }, [searchChat]);
-
-    // const filteredItems = items.filter(item =>
-    //     item.toLowerCase().includes(searchTerm.toLowerCase())
-    // );
 
     const handleLogout = () => {
         console.log('logout')
     }
+    
+    useEffect(() => {
+        fetchUsersWebSocket()
+            .then((users) => {
+            setContacts(users);
+            console.log("users:",users)
+            setFilteredContacts(
+                contacts.filter(
+                    item =>
+                    item.Username &&
+                    item.Username.toLowerCase().includes(searchChat.toLowerCase())
+                )
+                );
+            })
+            .catch(console.error);
+    }, []);
+
+    useEffect(() => {
+    if (!Array.isArray(contacts)) return;
+
+    setFilteredContacts(
+        contacts.filter(item => 
+            typeof item.Username === 'string' && 
+            item.Username.toLowerCase().includes(searchChat.toLowerCase())
+        )
+    );
+    }, [searchChat, contacts]);
+
 
     return ( 
         <Container>
@@ -60,10 +77,12 @@ const Menu = () => {
                 <input type="text" onChange={e => setSearchChat(e.target.value)} placeholder="Search"/>
             </div>
             <ul>
-                {contacts.map((contact, index) => (
+                {filteredContacts.map((contact, index) => (
                     <li key={index}>
-                        <ChatIcon src={contact.type === "group" ?  group : person} fill={'#403D39'}/>
-                        <p>{contact.chat_name}</p>
+                         <IconCircle>
+                            <ChatIcon src={contact.Username ? person : group} fill={'#403D39'} />
+                        </IconCircle>
+                        <p>{contact.Username}</p>
                     </li>
                 ))
                 }
