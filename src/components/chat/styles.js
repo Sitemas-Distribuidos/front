@@ -59,6 +59,7 @@ export const Container = styled.div`
                     border-bottom: 2px solid ${colors.primary};
                     color: ${colors.primary};
                     outline: none;
+                    padding-bottom: 6px;
                     width: 100%;
                 }
                 
@@ -98,9 +99,9 @@ export const MenuIcon = styled(SVG)`
 export const ClipIcon = styled(SVG)`   
     border-bottom: 2px solid ${colors.primary};
     cursor: pointer;
-    height: 28px;
-    padding-bottom: 4px;
-    width: 28px;
+    height: 32px;
+    padding-bottom: 6px;
+    width: 32px;
 
     & path {
         fill: ${({ fill }) => fill};
