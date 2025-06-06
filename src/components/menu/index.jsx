@@ -7,6 +7,9 @@ import { close, logout, group, person, search, addPerson, addGroup, more } from 
 /* 🎨 STYLES */
 import {  Container, CloseIcon, LogoutIcon, ChatIcon, SearchIcon, AddPersonIcon, AddGroupIcon, MoreIcon } from "./styles";
 
+/* 📁 CONTEXT */
+import { ModalContext } from '../../context/ModalContext';
+
 const contatos = [
   {
     chat_name: "Grupo 1",
@@ -36,14 +39,14 @@ const contatos = [
 
 const Menu = ({ onClose }) => {
 
-    // const { openModal } = useContext(ModalContext);
-  
+    const { openModal } = useContext(ModalContext);
+
     const searchInputRef = useRef(null);
 
     const [contacts, setContacts] = useState([]);
     const [searchChat, setSearchChat] = useState('');
 
-    console.log(searchChat, searchInputRef)
+    // console.log(searchChat, searchInputRef)
 
     useEffect(() => {
         setContacts(contatos);
@@ -62,8 +65,8 @@ const Menu = ({ onClose }) => {
             <div className="buttons-container">
                 <div className="buttons-container-top">
                     <CloseIcon src={close} fill={'#403D39'} onClick={() => onClose()} title="Close menu"/>
-                    <AddPersonIcon src={addPerson} title="New person" fill={'#403D39'}/>
-                    <AddGroupIcon src={addGroup} title="New group" fill={'#403D39'}/>
+                    <AddPersonIcon src={addPerson} title="New person" fill={'#403D39'} onClick={() => openModal('ADD')}/>
+                    <AddGroupIcon src={addGroup} title="New group" fill={'#403D39'} onClick={() => openModal('CREATE')}/>
                 </div>
                 <LogoutIcon src={logout} fill={'#403D39'} onClick={() => handleLogout()} title="Logout"/>
             </div>
