@@ -44,13 +44,14 @@ const Chat = () => {
     const fileInputRef = useRef(null);
 
     const [messages, setMessages] = useState([]);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const handleSubmit = () => {
         console.log(fileInputRef.current.value);
     }
 
     const handleOpenMenu = () => {
-
+      setIsMenuOpen(true);
     };
 
     // const handleFileChange = (event) => {
@@ -65,10 +66,10 @@ const Chat = () => {
 
     return(
         <Container>
-            <Menu />
+            {isMenuOpen && <Menu onClose={() => setIsMenuOpen(false)}/>}
             <div className="chat-conatiner">
               <div>
-              <MenuIcon src={menu} fill="#FFFcF2" onClick={() => handleOpenMenu()}/>
+              <MenuIcon src={menu} fill="#FFFcF2" onClick={() => handleOpenMenu()} title="Open menu"/>
             </div>
             <div className="chat">
                 {messages.map((message, index) => (
@@ -81,13 +82,13 @@ const Chat = () => {
             <div className="input-container">
                 <div>
                   <label>
-                    <ClipIcon src={clip} fill="#FFFcF2" />
+                    <ClipIcon src={clip} fill="#FFFcF2" title="Select a file"/>
                     <input className="hidden-input" type="file" accept="image/*" ref={fileInputRef} />
                   </label>
                   <input type="text" placeholder="Message" ref={messageInputRef}/>
                 </div>
                 <button onClick={() => handleSubmit()}>
-                    <SendIcon src={send} fill="#FFFcF2"/>
+                    <SendIcon src={send} fill="#FFFcF2" title="Send message"/>
                 </button>
             </div>
             </div>
