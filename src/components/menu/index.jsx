@@ -1,11 +1,11 @@
 /* ⚛ REACT */
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useContext } from "react";
 
 /* 📁 ASSETS*/
-import { close, add, logout, group, person, search } from "../../assets/icons";
+import { close, logout, group, person, search, addPerson, addGroup, more } from "../../assets/icons";
 
 /* 🎨 STYLES */
-import {  Container, CloseIcon, AddIcon, LogoutIcon, ChatIcon, SearchIcon } from "./styles";
+import {  Container, CloseIcon, LogoutIcon, ChatIcon, SearchIcon, AddPersonIcon, AddGroupIcon, MoreIcon } from "./styles";
 
 const contatos = [
   {
@@ -20,9 +20,24 @@ const contatos = [
     chat_name: "Grupo 2",
     type: "group"
   },
+  {
+    chat_name: "Ryan",
+    type: "person"
+  },
+  {
+    chat_name: "Knosh",
+    type: "person"
+  },
+  {
+    chat_name: "Vinizaum",
+    type: "person"
+  },
 ];
 
-const Menu = () => {
+const Menu = ({ onClose }) => {
+
+    // const { openModal } = useContext(ModalContext);
+  
     const searchInputRef = useRef(null);
 
     const [contacts, setContacts] = useState([]);
@@ -34,13 +49,9 @@ const Menu = () => {
         setContacts(contatos);
     }, []);
 
-    useEffect(() => {
-        setContacts(contacts.filter(item => item.toLowerCase().includes(searchChat.toLowerCase())));
-    }, [searchChat]);
-
-    // const filteredItems = items.filter(item =>
-    //     item.toLowerCase().includes(searchTerm.toLowerCase())
-    // );
+    const contatosFiltrados = contacts.filter((contact) =>
+        contact.chat_name.toLowerCase().includes(searchChat.toLowerCase())
+    );
 
     const handleLogout = () => {
         console.log('logout')
@@ -49,25 +60,31 @@ const Menu = () => {
     return ( 
         <Container>
             <div className="buttons-container">
-                <CloseIcon src={close} fill={'#403D39'}/>
-                <div>
-                    <AddIcon src={add} />
-                    <LogoutIcon src={logout} fill={'#403D39'} onClick={() => handleLogout()}/>
+                <div className="buttons-container-top">
+                    <CloseIcon src={close} fill={'#403D39'} onClick={() => onClose()} title="Close menu"/>
+                    <AddPersonIcon src={addPerson} title="New person" fill={'#403D39'}/>
+                    <AddGroupIcon src={addGroup} title="New group" fill={'#403D39'}/>
                 </div>
+                <LogoutIcon src={logout} fill={'#403D39'} onClick={() => handleLogout()} title="Logout"/>
             </div>
-            <div className="input-container">
-                <SearchIcon src={search} fill={'#403D39'}/>
-                <input type="text" onChange={e => setSearchChat(e.target.value)} placeholder="Search"/>
+            <div className="content-container">
+              <div className="input-container">
+                  <SearchIcon src={search} fill={'#403D39'}/>
+                  <input type="text" onChange={e => setSearchChat(e.target.value)} placeholder="Search"/>
+              </div>
+              <ul>
+                  {contatosFiltrados.map((contact, index) => (
+                      <li key={index}>
+                          <ChatIcon src={contact.type === "group" ?  group : person} fill={'#403D39'}/>
+                          <div className="contact-info">
+                            <p>{contact.chat_name}</p>
+                            <MoreIcon src={more} fill={'#403D39'}/>
+                          </div>
+                      </li>
+                  ))
+                  }
+              </ul>
             </div>
-            <ul>
-                {contacts.map((contact, index) => (
-                    <li key={index}>
-                        <ChatIcon src={contact.type === "group" ?  group : person} fill={'#403D39'}/>
-                        <p>{contact.chat_name}</p>
-                    </li>
-                ))
-                }
-            </ul>
         </Container>
      );
 }
