@@ -5,52 +5,70 @@ import colors from "../../utils/colors";
 export const Container = styled.div` 
     background: ${colors.primary};
     display: flex;
-    flex-direction: column;
-    width: 260px;
+    flex-direction: row;
+    width: 280px;
 
     .buttons-container {
         align-items: center;
-        display: flex;
-        justify-content: space-between;
-        padding: 10px;
-
-        div {
-            align-items: center;
-            display: flex;
-            gap: 10px;
-        }
-    }
-
-    .input-container{
-        align-items: flex-end;
-        display: flex;
-        margin: 6px 10px;
-
-        input {
-            background: ${colors.primary};
-            border: none;
-            border-bottom: 2px solid ${colors.secondary};
-            color: ${colors.secondary};
-            outline: none;
-            width: 100%;
-        }
-    }
-
-    ul {
-        align-items: flex-start;
+        background: #CCC5B9;
         display: flex;
         flex-direction: column;
-        padding: 10px;
-        
-        li {
-            border-bottom: 1px solid ${colors.secondary};
-            color: ${colors.secondary};
-            cursor: pointer;
+        justify-content: space-between;
+        padding: 10px 6px;
+
+        .buttons-container-top {
+            align-items: center;
             display: flex;
-            gap: 10px;
-            list-style: none;
+            flex-direction: column;
+            gap: 14px;
+        }
+    }
+
+    .content-container {
+        display: flex;
+        flex-direction: column;
+        padding: 20px 0;
+        width: 100%;
+
+        .input-container{
+            align-items: flex-end;
+            display: flex;
+            margin: 6px 10px;
+
+            input {
+                background: ${colors.primary};
+                border: none;
+                border-bottom: 2px solid ${colors.secondary};
+                color: ${colors.secondary};
+                outline: none;
+                padding-bottom: 6px;
+                width: 100%;
+            }
+        }
+
+        ul {
+            align-items: flex-start;
+            display: flex;
+            flex-direction: column;
             padding: 10px;
-            width: 100%;    
+
+            li {
+                border-bottom: 1px solid ${colors.secondary};
+                color: ${colors.secondary};
+                cursor: pointer;
+                display: flex;
+                gap: 10px;
+                list-style: none;
+                padding: 10px;
+                width: 100%;    
+
+                .contact-info {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-between;
+                    width: 100%;
+                }
+            }
         }
     }
 `;
@@ -65,13 +83,30 @@ export const CloseIcon = styled(SVG)`
     }
 `;
 
-export const AddIcon = styled(SVG)` 
-    background: ${colors.secondary};
-    border-radius: 3px;
+export const AddPersonIcon = styled(SVG)` 
     cursor: pointer;
-    height: 32px;
-    padding: 0 10px;
-    width: 42px;
+    height: 34px;
+    width: 34px;
+
+    & path {
+        fill: ${({ fill }) => fill};
+    }
+`;
+
+export const AddGroupIcon = styled(SVG)` 
+    cursor: pointer;
+    height: 34px;
+    width: 34px;
+
+    & path {
+        fill: ${({ fill }) => fill};
+    }
+`;
+
+export const MoreIcon = styled(SVG)` 
+    cursor: pointer;
+    height: 24px;
+    width: 24px;
 
     & path {
         fill: ${({ fill }) => fill};
@@ -90,8 +125,9 @@ export const LogoutIcon = styled(SVG)`
 
 export const SearchIcon = styled(SVG)`  
     border-bottom: 2px solid ${colors.secondary};
-    height: 24px;
-    width: 24px;
+    height: 32px;
+    padding-bottom: 6px;
+    width: 32px;
 
     & path {
         fill: ${({ fill }) => fill};
@@ -100,8 +136,8 @@ export const SearchIcon = styled(SVG)`
 
 export const ChatIcon = styled(SVG)` 
     cursor: pointer;
-    height: 24px;
-    width: 24px;
+    height: 28px;
+    width: 28px;
 
     & path {
         fill: ${({ fill }) => fill};
