@@ -26,6 +26,7 @@ export const Container = styled.main`
         border-bottom: 2px solid ${colors.primary};
         color: ${colors.primary};
         outline: none;
+        padding-bottom: 6px;
     }
 
     button {
