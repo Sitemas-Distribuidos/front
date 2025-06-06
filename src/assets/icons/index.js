@@ -8,5 +8,10 @@ import clip from "./clip.svg";
 import menu from "./menu.svg";
 import send from "./send.svg";
 import search from "./search.svg";
+import addPerson from "./add-person.svg";
+import addGroup from "./add-group.svg";
+import trash from "./trash.svg";
+import more from "./more.svg";
+import pin from "./pin.svg";
 
-export { close, add, logout, group, person, login, clip, menu, send, search }
+export { close, add, logout, group, person, login, clip, menu, send, search, addPerson, addGroup, trash, more, pin };
