@@ -1,6 +1,10 @@
 /* ⚛ REACT */
 import React, { useContext } from 'react';
 
+/* 🧩 COMPONENTS */
+import Add from '../add';
+import Create from '../create';
+
 /* 📁 ASSETS */
 import { close } from "../../assets/icons";
 
@@ -9,17 +13,26 @@ import { Container, CloseIcon } from "./styles";
 
 import { ModalContext } from '../../context/ModalContext';
 
-const Modal = ({ children }) => {
+const MODAL_COMPONENTS = {
+    ADD: Add,
+    CREATE: Create,
+};
+  
+  const DefaultModal = () => <p>Modal inválido</p>;
 
-    const { isModalOpen, closeModal } = useContext(ModalContext);
+const Modal = () => {
 
-    if (!isModalOpen) return null;
+    const { modal, closeModal } = useContext(ModalContext);
+
+    if (!modal.isOpen) return null;
     
+    const Component = MODAL_COMPONENTS[modal.modalType] || DefaultModal;
+
     return(
-        <Container>
-            <div className="modal-content">
+        <Container onClick={() => closeModal()}>
+            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                 <CloseIcon src={close} fill={'#403D39'} onClick={() => closeModal()}/>
-                {children}
+                <Component {...modal.payload} closeModal={closeModal} />
             </div>
         </Container>
     );
