@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import SVG from "react-inlinesvg";
-import colors from "../../utils/colors";
+import { colors } from "../../utils/colors";
 
 export const Container = styled.main`   
     align-items: center;
