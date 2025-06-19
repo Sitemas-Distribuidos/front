@@ -26,13 +26,13 @@ export const Container = styled.div`
     z-index: 1000;
 
     .modal-content {
-        background: #FFF;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0,0,0,0.3);
-        max-width: 500px;
-        min-width: 300px;
-        padding: 30px;
-        animation: ${fadeIn} 0.3s ease-out forwards;
+      animation: ${fadeIn} 0.3s ease-out forwards;
+      background: #FFF;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+      max-width: 500px;
+      min-width: 380px;
+      padding: 30px;
     }
 `;
 
