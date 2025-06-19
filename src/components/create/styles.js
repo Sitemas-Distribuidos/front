@@ -18,7 +18,7 @@ export const Container = styled.div`
         border: none;
         border-bottom: 2px solid ${colors.secondary};
         outline: none;
-        padding: 0 10px;
+        padding: 10px;
         width: 100%;
     }
 
@@ -73,7 +73,7 @@ export const PersonIcon = styled(SVG)`
     width: 34px;
 
     & path {
-        fill: ${({ fill }) => fill};
+        fill: #403D39;
     }
 `;
 
@@ -82,7 +82,7 @@ export const AddOrRemoveIcon = styled(SVG)`
     width: 28px;
 
     & path {
-        fill: ${({ fill }) => fill};
+        fill: #403D39;
     }
 `;
 
