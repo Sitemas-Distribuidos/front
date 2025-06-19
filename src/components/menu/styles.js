@@ -6,7 +6,8 @@ export const Container = styled.div`
     background: ${colors.primary};
     display: flex;
     flex-direction: row;
-    width: 280px;
+    height: 600px;
+    width: 300px;
 
     .buttons-container {
         align-items: center;
@@ -50,9 +51,12 @@ export const Container = styled.div`
             align-items: flex-start;
             display: flex;
             flex-direction: column;
+            overflow: auto;
             padding: 10px;
+            scrollbar-width: thin;
 
             li {
+                align-items: center;
                 border-bottom: 1px solid ${colors.secondary};
                 color: ${colors.secondary};
                 cursor: pointer;
@@ -63,10 +67,19 @@ export const Container = styled.div`
                 width: 100%;    
 
                 .contact-info {
+                    align-items: center;
+                    box-sizing: border-box;
                     display: flex;
                     flex-direction: row;
                     justify-content: space-between;
                     width: 100%;
+
+                    span {
+                        max-width: 140px; 
+                        overflow: hidden;
+                        text-overflow: ellipsis; 
+                        white-space: nowrap;
+                    }
                 }
             }
         }
@@ -81,6 +94,10 @@ export const CloseIcon = styled(SVG)`
     & path {
         fill: ${({ fill }) => fill};
     }
+
+    &:hover {
+        opacity: 0.7;
+    }
 `;
 
 export const AddPersonIcon = styled(SVG)` 
@@ -90,6 +107,10 @@ export const AddPersonIcon = styled(SVG)`
 
     & path {
         fill: ${({ fill }) => fill};
+    }
+
+    &:hover {
+        opacity: 0.7;
     }
 `;
 
@@ -101,6 +122,10 @@ export const AddGroupIcon = styled(SVG)`
     & path {
         fill: ${({ fill }) => fill};
     }
+
+    &:hover {
+        opacity: 0.7;
+    }
 `;
 
 export const MoreIcon = styled(SVG)` 
@@ -111,6 +136,10 @@ export const MoreIcon = styled(SVG)`
     & path {
         fill: ${({ fill }) => fill};
     }
+
+    &:hover {
+        opacity: 0.7;
+    }
 `;
 
 export const LogoutIcon = styled(SVG)` 
@@ -120,6 +149,10 @@ export const LogoutIcon = styled(SVG)`
 
     & path {
         fill: ${({ fill }) => fill};
+    }
+
+    &:hover {
+        opacity: 0.7;
     }
 `;
 
