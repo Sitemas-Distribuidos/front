@@ -3,6 +3,7 @@ import { useState, useEffect, useContext } from "react";
 
 /* 🧠 CONTEXT */
 import { ModalContext } from '../../context/ModalContext';
+import { MessageContext } from '../../context/MessageContext';
 
 /* 📁 ASSETS */
 import { person, add, remove } from "../../assets/icons";
@@ -43,7 +44,7 @@ const contatos = [
   },
   {
     id: 7,
-    chat_name: "CEO",
+    chat_name: "C.E.O.",
     type: "person"
   },
   {
@@ -66,6 +67,7 @@ const contatos = [
 const Create = () => {
 
     const { closeModal } = useContext(ModalContext);
+    const { showMessage } = useContext(MessageContext);
 
     const [contacts, setContacts] = useState([]);
     const [isPlusIcon, setIsPlusIcon] = useState(true);
@@ -89,10 +91,10 @@ const Create = () => {
         setIsLoading(true);
         setTimeout(() => {
             setIsLoading(false);
-            alert("Contact added successfully!");
-            console.log("Selected contacts:", selected);
             closeModal();
-        }, 5000); 
+            showMessage('error', 'Group created successfully!');
+            console.log("Selected contacts:", selected);
+        }, 4000); 
     }
 
     return (
@@ -102,10 +104,10 @@ const Create = () => {
             <ul>
                 {contacts.map((contact, index) => (
                     <li key={index}>
-                        <PersonIcon src={person} fill={'#403D39'}/>
+                        <PersonIcon src={person} />
                         <div className="contact-info">
                             <span>{contact.chat_name}</span>
-                            <AddOrRemoveIcon src={selected.includes(index) ? remove : add} fill={'#403D39'} onClick={() => handleChange(index)}/>
+                            <AddOrRemoveIcon src={selected.includes(index) ? remove : add} onClick={() => handleChange(index)}/>
                         </div>
                     </li>
                 ))}
