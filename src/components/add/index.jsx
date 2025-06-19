@@ -1,8 +1,9 @@
 /* ⚛ REACT */
-import { useState, useContext  } from "react";
+import { useState, useContext } from "react";
 
 /* 🧠 CONTEXT */
 import { ModalContext } from '../../context/ModalContext';
+import { MessageContext } from '../../context/MessageContext';
 
 /* 📁 ASSETS */
 import { add } from "../../assets/icons";
@@ -14,6 +15,7 @@ import { Container, AddIcon } from "./styles";
 const Add = () => {
 
     const { closeModal } = useContext(ModalContext);
+    const { showMessage } = useContext(MessageContext);
 
     const [isLoading, setIsLoading] = useState(false);
 
@@ -21,9 +23,9 @@ const Add = () => {
         setIsLoading(true);
         setTimeout(() => {
             setIsLoading(false);
-            alert("Contact added successfully!");
             closeModal();
-        }, 5000); 
+            showMessage('warning', 'Contact added successfully!');
+        }, 3000); 
     }
 
     return (
