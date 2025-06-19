@@ -14,6 +14,11 @@ import addGroup from "./add-group.svg";
 import trash from "./trash.svg";
 import more from "./more.svg";
 import pin from "./pin.svg";
-import exclamation from "./exclamation.svg";
+import edit from "./edit.svg";
+import error from "./error.svg";
+import success from "./success.svg";
+import warning from "./warning.svg";
 
-export { close, add, logout, group, person, login, clip, menu, send, search, addPerson, addGroup, trash, more, pin, remove, exclamation };
+export { close, add, logout, group, person, login, clip, menu, send, search, addPerson, addGroup, trash, more, pin, remove, edit,
+    error, success, warning
+};
