@@ -19,7 +19,7 @@ const MODAL_COMPONENTS = {
     CREATE: Create,
 };
   
-  const DefaultModal = () => <p>Modal inválido</p>;
+const DefaultModal = () => <p>Modal inválido</p>;
 
 const Modal = () => {
 
