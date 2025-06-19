@@ -1,5 +1,8 @@
 /* ⚛ REACT */
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useRef } from "react";
+
+/* 🧩 COMPONENTS */
+import Dropdown from "../dropdown";
 
 /* 🧠 CONTEXT */
 import { ModalContext } from '../../context/ModalContext';
@@ -75,17 +78,36 @@ const Menu = ({ onClose }) => {
 
     // const searchInputRef = useRef(null);
 
+    const dropdownRef = useRef(null);
+
+    const [openDropdown, setOpenDropdown] = useState(null);
     const [contacts, setContacts] = useState([]);
     const [searchChat, setSearchChat] = useState('');
 
 
     useEffect(() => {
         setContacts(contatos);
+
+        const handleClickOutside = (event) => {
+          if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+            setOpenDropdown(null);
+          }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+
+        return () => {
+          document.removeEventListener('mousedown', handleClickOutside);
+        };
     }, []);
 
     const contatosFiltrados = contacts.filter((contact) =>
         contact.chat_name.toLowerCase().includes(searchChat.toLowerCase())
     );
+
+    const handleToggle = (index) => {
+      setOpenDropdown((prev) => (prev === index ? null : index));
+    };
 
     const handleLogout = () => {
         console.log('logout')
@@ -93,28 +115,32 @@ const Menu = ({ onClose }) => {
 
     return ( 
         <Container>
-            <div className="buttons-container">
+            <div className="buttons-container" >
                 <div className="buttons-container-top">
-                    <CloseIcon src={close} fill={'#403D39'} onClick={() => onClose()} title="Close menu"/>
-                    <AddPersonIcon src={addPerson} title="New person" fill={'#403D39'} onClick={() => openModal('ADD')}/>
-                    <AddGroupIcon src={addGroup} title="New group" fill={'#403D39'} onClick={() => openModal('CREATE')}/>
+                    <CloseIcon src={close} onClick={() => onClose()} title="Close menu"/>
+                    <AddPersonIcon src={addPerson} title="New person" onClick={() => openModal('ADD')}/>
+                    <AddGroupIcon src={addGroup} title="New group" onClick={() => openModal('CREATE')}/>
                 </div>
-                <LogoutIcon src={logout} fill={'#403D39'} onClick={() => handleLogout()} title="Logout"/>
+                <LogoutIcon src={logout} onClick={() => handleLogout()} title="Logout"/>
             </div>
             <div className="content-container">
               <div className="input-container">
-                  <SearchIcon src={search} fill={'#403D39'}/>
+                  <SearchIcon src={search} />
                   <input type="text" onChange={e => setSearchChat(e.target.value)} placeholder="Search"/>
               </div>
               <ul>
                   {contatosFiltrados.map((contact, index) => (
                       <li key={index}>
-                          <ChatIcon src={contact.type === "group" ?  group : person} fill={'#403D39'}/>
+                          <ChatIcon src={contact.type === "group" ?  group : person}/>
                           <div className="contact-info">
                             <span>{contact.chat_name}</span>
-                            <MoreIcon src={more} fill={'#403D39'} onClick={() => {
-                              
-                            }}/>
+                            <div ref={openDropdown === index ? dropdownRef : null}>
+                              <MoreIcon src={more} onClick={() => handleToggle(index)}/>
+                              {openDropdown === index && (
+                                <Dropdown onClose={() => setOpenDropdown(null)} />
+                              )}
+                            </div>
+
                           </div>
                       </li>
                   ))
