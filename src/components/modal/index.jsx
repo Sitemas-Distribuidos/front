@@ -5,13 +5,14 @@ import React, { useContext } from 'react';
 import Add from '../add';
 import Create from '../create';
 
+/* 🧠 CONTEXT */
+import { ModalContext } from '../../context/ModalContext';
+
 /* 📁 ASSETS */
 import { close } from "../../assets/icons";
 
 /* 🎨 STYLES */
 import { Container, CloseIcon } from "./styles";
-
-import { ModalContext } from '../../context/ModalContext';
 
 const MODAL_COMPONENTS = {
     ADD: Add,
