@@ -7,7 +7,7 @@ import { close, add, logout, group, person, search } from "../../assets/icons";
 /* 🎨 STYLES */
 import {  Container, CloseIcon, AddIcon, LogoutIcon, ChatIcon, SearchIcon, IconCircle } from "./styles";
 
-import { fetchUsersWebSocket } from "../../API/UserSocket/UserImporter";
+import { fetchUsers } from "../../api/services/fetchUser";
 
 const contatos = [
   {
@@ -34,32 +34,28 @@ const Menu = () => {
     const handleLogout = () => {
         console.log('logout')
     }
-    
+
     useEffect(() => {
-        fetchUsersWebSocket()
-            .then((users) => {
-            setContacts(users);
-            console.log("users:",users)
-            setFilteredContacts(
-                contacts.filter(
-                    item =>
-                    item.Username &&
-                    item.Username.toLowerCase().includes(searchChat.toLowerCase())
-                )
-                );
-            })
-            .catch(console.error);
+    fetchUsers()
+        .then((users) => {
+        console.log('Received users:', users);
+        setContacts(users);
+        })
+        .catch((error) => {
+        console.error('Failed to fetch users:', error);
+        });
     }, []);
+    
 
     useEffect(() => {
-    if (!Array.isArray(contacts)) return;
+        if (!Array.isArray(contacts)) return;
 
-    setFilteredContacts(
-        contacts.filter(item => 
-            typeof item.Username === 'string' && 
-            item.Username.toLowerCase().includes(searchChat.toLowerCase())
-        )
-    );
+        setFilteredContacts(
+            contacts.filter(item => 
+                typeof item.Username === 'string' && 
+                item.Username.toLowerCase().includes(searchChat.toLowerCase())
+            )
+        );
     }, [searchChat, contacts]);
 
 
