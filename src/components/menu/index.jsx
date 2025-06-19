@@ -1,14 +1,14 @@
 /* ⚛ REACT */
-import React, { useEffect, useRef, useState, useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
+
+/* 🧠 CONTEXT */
+import { ModalContext } from '../../context/ModalContext';
 
 /* 📁 ASSETS*/
 import { close, logout, group, person, search, addPerson, addGroup, more } from "../../assets/icons";
 
 /* 🎨 STYLES */
 import {  Container, CloseIcon, LogoutIcon, ChatIcon, SearchIcon, AddPersonIcon, AddGroupIcon, MoreIcon } from "./styles";
-
-/* 📁 CONTEXT */
-import { ModalContext } from '../../context/ModalContext';
 
 const contatos = [
   {
@@ -35,18 +35,49 @@ const contatos = [
     chat_name: "Vinizaum",
     type: "person"
   },
+  {
+    chat_name: "Ricando",
+    type: "person"
+  },
+  {
+    chat_name: "Mikamel",
+    type: "person"
+  },
+  {
+    chat_name: "CEO",
+    type: "person"
+  },
+  {
+    chat_name: "Dev Team",
+    type: "group"
+  },
+  {
+    chat_name: "Marketing Teameeeeeeeeeeeeeeeeeeeee",
+    type: "group"
+  },
+  {
+    chat_name: "Fulano",
+    type: "person"
+  },
+  {
+    chat_name: "Ciclano",
+    type: "person"
+  },
+  {
+    chat_name: "Beltrano",
+    type: "person"
+  },
 ];
 
 const Menu = ({ onClose }) => {
 
     const { openModal } = useContext(ModalContext);
 
-    const searchInputRef = useRef(null);
+    // const searchInputRef = useRef(null);
 
     const [contacts, setContacts] = useState([]);
     const [searchChat, setSearchChat] = useState('');
 
-    // console.log(searchChat, searchInputRef)
 
     useEffect(() => {
         setContacts(contatos);
@@ -80,8 +111,10 @@ const Menu = ({ onClose }) => {
                       <li key={index}>
                           <ChatIcon src={contact.type === "group" ?  group : person} fill={'#403D39'}/>
                           <div className="contact-info">
-                            <p>{contact.chat_name}</p>
-                            <MoreIcon src={more} fill={'#403D39'}/>
+                            <span>{contact.chat_name}</span>
+                            <MoreIcon src={more} fill={'#403D39'} onClick={() => {
+                              
+                            }}/>
                           </div>
                       </li>
                   ))
