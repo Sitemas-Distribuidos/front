@@ -15,14 +15,42 @@ export const Container = styled.div`
         height: 600px;
         justify-content: center;
         padding: 20px;
-        width: 400px;
+        width: 420px;
 
         -webkit-box-shadow: 5px 5px 17px 1px rgba(0, 0, 0, 0.3);
+
+        .chat-header {
+            align-items: center;
+            display: flex;
+            gap: 28px;
+
+            .chat-name {
+                align-items: center;
+                display: flex;
+                gap: 10px;
+
+                h2 {
+                    color: ${colors.primary};
+                    font-size: 20px;
+                    font-weight: 600;
+                    max-width: 260px; 
+                    overflow: hidden;
+                    text-overflow: ellipsis; 
+                    white-space: nowrap;
+                }
+            }
+            
+        }
 
         .chat {
             display: flex;
             flex-direction: column;
             height: 550px;
+            margin: 10px 0;
+            padding-right: 8px;
+            overflow: auto;
+            scrollbar-color: ${colors.primary} ${colors.secondary};
+            scrollbar-width: thin;
             width: 100%;
             
             .message-container {
@@ -87,6 +115,16 @@ export const Container = styled.div`
 `;
 
 export const MenuIcon = styled(SVG)` 
+    cursor: pointer;
+    height: 28px;
+    width: 28px;
+
+    & path {
+        fill: ${({ fill }) => fill};
+    }
+`;
+
+export const ChatIcon = styled(SVG)` 
     cursor: pointer;
     height: 28px;
     width: 28px;
