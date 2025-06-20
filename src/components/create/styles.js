@@ -11,7 +11,7 @@ export const Container = styled.div`
     h1 {
         font-size: 24px;
         font-weight: 600;
-        color: #403D39;
+        color: ${colors.secondary};
     }
 
     input {
@@ -55,7 +55,7 @@ export const Container = styled.div`
 
     button {
         align-items: center;
-        background: #403D39;
+        background: ${colors.secondary};
         border: none;
         color: #FFF;
         cursor: pointer;
@@ -73,7 +73,7 @@ export const PersonIcon = styled(SVG)`
     width: 34px;
 
     & path {
-        fill: #403D39;
+        fill: ${colors.secondary};
     }
 `;
 
@@ -82,7 +82,7 @@ export const AddOrRemoveIcon = styled(SVG)`
     width: 28px;
 
     & path {
-        fill: #403D39;
+        fill: ${colors.secondary};
     }
 `;
 
