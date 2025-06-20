@@ -10,6 +10,7 @@ import { Container, LoginIcon } from "./styles";
 const Join = () => {
 
     const usernameRef = useRef(null);
+    const userpasswordRef = useRef(null);
 
     const [isLoading, setIsLoading] = useState(false);
 
@@ -27,10 +28,20 @@ const Join = () => {
     return(
         <Container>
             <h1>Join</h1>
-            <input type="text" ref={usernameRef} placeholder="Type your user name"/>
+            <form>
+                <div>
+                    <label htmlFor="username">User Name</label>
+                    <input type="text" ref={usernameRef} placeholder="Type your user name"/>
+                </div>
+                <div>
+                    <label htmlFor="password">Password</label>
+                    <input type="password" ref={userpasswordRef} placeholder="Type your password"/>
+                </div>
+                <a href="" >Create account</a>
+            </form>
             <button onClick={() => handleSubmit()}>
                 {isLoading ? 'Entering...' : 'Enter'}
-                <LoginIcon src={login} fill="#000000"/>
+                <LoginIcon src={login} />
             </button>
         </Container>
     );
