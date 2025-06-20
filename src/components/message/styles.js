@@ -5,29 +5,36 @@ import { colors } from "../../utils/colors";
 const fadeInDown = keyframes` 
   from {
     opacity: 0;
-    transform: translateY(-20px); /* sobe */
+    transform: translateY(-20px);
   }
   to {
     opacity: 1;
-    transform: translateY(0); /* posição normal */
+    transform: translateY(0); 
   }
 `
 
-export const Container = styled.div`
-    align-items: center;
-    animation: ${fadeInDown} 0.3s ease;
-    background: ${colors.primary};
-    border-radius: 8px;
+export const Container = styled.ul`
     display: flex;
-    gap: 20px;
-    padding: 12px 20px;
+    flex-direction: column;
+    gap: 10px;
     position: fixed;
-    right: 20px;
+    right: 10px;
     top: 20px;
     z-index: 9999;
 
-    span {
+    li {
+      align-items: center;
+      animation: ${fadeInDown} 0.3s ease;
+      background: ${colors.primary};
+      border-radius: 8px;
+      display: flex;
+      gap: 20px;
+      list-style: none;
+      padding: 12px 20px;
+      
+      span {
         color: ${colors.secondary};
+      }
     }
 `
 
