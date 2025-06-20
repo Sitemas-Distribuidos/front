@@ -10,7 +10,7 @@ export const Container = styled.main`
     display: flex;
     flex-direction: column;
     gap: 20px;
-    height: 200px;
+    height: 320px;
     justify-content: center;
     width: 400px;
 
@@ -20,13 +20,41 @@ export const Container = styled.main`
         color: ${colors.primary};
     }
 
-    input {
-        background: ${colors.secondary};
-        border: none;
-        border-bottom: 2px solid ${colors.primary};
-        color: ${colors.primary};
-        outline: none;
-        padding-bottom: 6px;
+    form {
+        align-items: center;    
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        justify-content: center;
+        width: 100%;
+
+        div {
+            display: flex;
+            flex-direction: column;
+            label {
+                color: ${colors.primary};
+                font-size: 14px;
+                font-weight: 500;
+                margin-bottom: 4px;
+            }
+            
+            input {
+                background: ${colors.secondary};
+                border: none;
+                border-bottom: 2px solid ${colors.primary};
+                color: ${colors.primary};
+                outline: none;
+                padding-bottom: 6px;
+            }
+        }
+        a {
+            color: ${colors.primary};
+            font-size: 14px;
+
+            &:visited {
+                color: #CCC5B9;
+            }
+        }
     }
 
     button {
@@ -34,7 +62,7 @@ export const Container = styled.main`
         background: ${colors.primary};
         border: none;
         border-radius: 5px;
-        color: #000;
+        color: ${colors.secondary};
         cursor: pointer;
         display: flex;
         outline: none;
@@ -43,11 +71,11 @@ export const Container = styled.main`
 `;
 
 export const LoginIcon = styled(SVG)`   
-    height: 16px;
+    height: 18px;
     margin-left: 10px;
-    width: 16px;
+    width: 18px;
 
     & path {
-        fill: ${({ fill }) => fill};
+        fill: ${colors.secondary};
     }
 `;
