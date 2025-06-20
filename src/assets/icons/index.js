@@ -18,7 +18,8 @@ import edit from "./edit.svg";
 import error from "./error.svg";
 import success from "./success.svg";
 import warning from "./warning.svg";
+import register from "./register.svg";
 
 export { close, add, logout, group, person, login, clip, menu, send, search, addPerson, addGroup, trash, more, pin, remove, edit,
-    error, success, warning
+    error, success, warning, register 
 };
