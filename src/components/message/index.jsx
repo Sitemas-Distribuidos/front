@@ -1,9 +1,8 @@
 /* ⚛ REACT */
-import { useEffect, useContext } from "react";
+import { useContext } from "react";
 
 /* 🧠 CONTEXT */
 import { MessageContext } from '../../context/MessageContext';
-
 
 /* 📁 ASSETS */
 import { error, success, warning } from "../../assets/icons";
@@ -12,7 +11,7 @@ import { error, success, warning } from "../../assets/icons";
 import { Container, MessageIcon} from "./styles";
 
 const Message = () => {
-    const { message, hideMessage } = useContext(MessageContext);
+    const { messages } = useContext(MessageContext);
 
     const iconMap = {
         warning: warning,
@@ -20,20 +19,14 @@ const Message = () => {
         success: success,
     };
 
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            hideMessage();
-        }, 3000);
-
-        return () => clearTimeout(timer);
-    }, [hideMessage]);
-
-    if (!message.isShowingUp) return null;
-
     return(
         <Container>
-            <MessageIcon src={iconMap[message.type]}/>
-            <span>{message.content}</span>
+        {messages.map((message) => (
+            <li key={message.id} type={message.type}>
+                <MessageIcon src={iconMap[message.type]} alt={message.type} />
+                <span>{message.content}</span>
+            </li>
+        ))}
         </Container>
     );
 }
