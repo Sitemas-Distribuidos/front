@@ -106,7 +106,7 @@ export const AddPersonIcon = styled(SVG)`
     width: 34px;
 
     & path {
-        fill: #403D39;
+        fill: ${colors.secondary};
     }
 
     &:hover {
@@ -120,7 +120,7 @@ export const AddGroupIcon = styled(SVG)`
     width: 34px;
 
     & path {
-        fill: #403D39;
+        fill: ${colors.secondary};
     }
 
     &:hover {
@@ -134,7 +134,7 @@ export const MoreIcon = styled(SVG)`
     width: 24px;
 
     & path {
-        fill: #403D39;
+        fill: ${colors.secondary};
     }
 
     &:hover {
@@ -148,7 +148,7 @@ export const LogoutIcon = styled(SVG)`
     width: 24px;
 
     & path {
-        fill: #403D39;
+        fill: ${colors.secondary};
     }
 
     &:hover {
@@ -163,7 +163,7 @@ export const SearchIcon = styled(SVG)`
     width: 32px;
 
     & path {
-        fill: #403D39;
+        fill: ${colors.secondary};
     }
 `;
 
@@ -173,6 +173,6 @@ export const ChatIcon = styled(SVG)`
     width: 28px;
 
     & path {
-        fill: #403D39;
+        fill: ${colors.secondary};
     }
 `;
