@@ -89,9 +89,9 @@ const Chat = () => {
             {isMenuOpen && <Menu onClose={() => setIsMenuOpen(false)}/>}
             <div className="chat-conatiner">
               <div className="chat-header">
-                <MenuIcon src={menu} fill="#FFFcF2" onClick={() => handleOpenMenu()} title="Open menu"/>
+                <MenuIcon src={menu} onClick={() => handleOpenMenu()} title="Open menu"/>
                 <div className="chat-name">
-                   <ChatIcon src={group} fill={'#FFFcF2'}/>
+                   <ChatIcon src={group} />
                   <h2>Maior nome possível já existente na face da Terra</h2>
                 </div>
               </div>
@@ -106,13 +106,13 @@ const Chat = () => {
               <div className="input-container">
                   <div>
                     <label>
-                      <ClipIcon src={clip} fill="#FFFcF2" title="Select a file"/>
+                      <ClipIcon src={clip} title="Select a file"/>
                       <input className="hidden-input" type="file" accept="image/*" ref={fileInputRef} />
                     </label>
                     <input type="text" placeholder="Message" ref={messageInputRef}/>
                   </div>
                   <button onClick={() => handleSubmit()}>
-                      <SendIcon src={send} fill="#FFFcF2" title="Send message"/>
+                      <SendIcon src={send} title="Send message"/>
                   </button>
               </div>
             </div>
