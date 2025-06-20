@@ -10,7 +10,7 @@ export const Container = styled.main`
     display: flex;
     flex-direction: column;
     gap: 20px;
-    height: 320px;
+    height: 380px;
     justify-content: center;
     width: 400px;
 
@@ -35,7 +35,6 @@ export const Container = styled.main`
                 color: ${colors.primary};
                 font-size: 14px;
                 font-weight: 500;
-                margin-bottom: 4px;
             }
             
             input {
@@ -47,10 +46,11 @@ export const Container = styled.main`
                 padding-bottom: 6px;
             }
         }
+
         a {
             color: ${colors.primary};
             font-size: 14px;
-
+            
             &:visited {
                 color: #CCC5B9;
             }
@@ -70,10 +70,10 @@ export const Container = styled.main`
     }
 `;
 
-export const LoginIcon = styled(SVG)`   
-    height: 18px;
+export const RegisterIcon = styled(SVG)`   
+    height: 20px;
     margin-left: 10px;
-    width: 18px;
+    width: 20px;
 
     & path {
         fill: ${colors.secondary};

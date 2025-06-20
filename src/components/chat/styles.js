@@ -120,7 +120,7 @@ export const MenuIcon = styled(SVG)`
     width: 28px;
 
     & path {
-        fill: ${({ fill }) => fill};
+        fill: ${colors.primary};
     }
 `;
 
@@ -130,7 +130,7 @@ export const ChatIcon = styled(SVG)`
     width: 28px;
 
     & path {
-        fill: ${({ fill }) => fill};
+        fill: ${colors.primary};
     }
 `;
 
@@ -142,7 +142,7 @@ export const ClipIcon = styled(SVG)`
     width: 32px;
 
     & path {
-        fill: ${({ fill }) => fill};
+        fill: ${colors.primary};
     }
 `;
 
@@ -152,6 +152,6 @@ export const SendIcon = styled(SVG)`
     width: 28px;
 
     & path {
-        fill: ${({ fill }) => fill};
+        fill: ${colors.primary};
     }
 `;

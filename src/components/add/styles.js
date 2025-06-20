@@ -11,7 +11,7 @@ export const Container = styled.div`
     h1 {
         font-size: 24px;
         font-weight: 600;
-        color: #403D39;
+        color: ${colors.secondary};
     }
 
     input {
@@ -24,7 +24,7 @@ export const Container = styled.div`
 
     button {
         align-items: center;
-        background: #403D39;
+        background: ${colors.secondary};
         border: none;
         color: #FFF;
         cursor: pointer;

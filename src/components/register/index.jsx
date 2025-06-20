@@ -2,12 +2,12 @@
 import React, { useRef, useState } from "react";
 
 /* 📁 ASSETS*/
-import { login } from "../../assets/icons";
+import { register } from "../../assets/icons";
 
 /* 🎨 STYLES */
-import { Container, LoginIcon } from "./styles";
+import { Container, RegisterIcon } from "./styles";
 
-const Join = () => {
+const Register = () => {
 
     const usernameRef = useRef(null);
     const userpasswordRef = useRef(null);
@@ -27,24 +27,28 @@ const Join = () => {
 
     return(
         <Container>
-            <h1>Join</h1>
+            <h1>Register</h1>
             <form>
                 <div>
                     <label htmlFor="username">User Name</label>
-                    <input type="text" ref={usernameRef} placeholder="Type your user name"/>
+                    <input type="text" ref={usernameRef} />
                 </div>
                 <div>
                     <label htmlFor="password">Password</label>
-                    <input type="password" ref={userpasswordRef} placeholder="Type your password"/>
+                    <input type="password" ref={userpasswordRef} />
                 </div>
-                <a href="" >Create account</a>
+                <div>
+                    <label htmlFor="confirm-password">Confirm Password</label>
+                    <input type="password" ref={userpasswordRef} />
+                </div>
+                <a href="" >Already have an account?</a>
             </form>
             <button onClick={() => handleSubmit()}>
-                {isLoading ? 'Entering...' : 'Enter'}
-                <LoginIcon src={login} />
+                {isLoading ? 'Registering...' : 'Register'}
+                <RegisterIcon src={register} />
             </button>
         </Container>
     );
 }
 
-export default Join;
+export default Register;

@@ -36,6 +36,6 @@ export const ButtonIcon = styled(SVG)`
     height: 20px;
     width: 20px;
     & path {
-        fill: #FFFCF2;
+        fill: ${colors.primary};
     }
 `
