@@ -21,8 +21,8 @@ const Home = () => {
                 <Container>
                     <Message />
                     {/* <Join /> */}
-                    <Register />
-                    {/* <Chat /> */}
+                    {/* <Register /> */}
+                    <Chat />
                     <Modal />
                 </Container>
             </ModalProvider>
