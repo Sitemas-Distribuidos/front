@@ -11,7 +11,7 @@ import { ModalContext } from '../../context/ModalContext';
 import { close, logout, group, person, search, addPerson, addGroup, more } from "../../assets/icons";
 
 /* 🎨 STYLES */
-import {  Container, CloseIcon, LogoutIcon, ChatIcon, SearchIcon, AddPersonIcon, AddGroupIcon, MoreIcon } from "./styles";
+import { Sidebar, CloseIcon, LogoutIcon, ChatIcon, SearchIcon, AddPersonIcon, AddGroupIcon, MoreIcon } from "./styles";
 
 const contatos = [
   {
@@ -114,7 +114,7 @@ const Menu = ({ onClose }) => {
     }
 
     return ( 
-        <Container>
+        <Sidebar>
             <div className="buttons-container" >
                 <div className="buttons-container-top">
                     <CloseIcon src={close} onClick={() => onClose()} title="Close menu"/>
@@ -135,7 +135,7 @@ const Menu = ({ onClose }) => {
                           <div className="contact-info">
                             <span>{contact.chat_name}</span>
                             <div ref={openDropdown === index ? dropdownRef : null}>
-                              <MoreIcon src={more} onClick={() => handleToggle(index)}/>
+                              <MoreIcon src={more} title="More options" onClick={() => handleToggle(index)}/>
                               {openDropdown === index && (
                                 <Dropdown onClose={() => setOpenDropdown(null)} />
                               )}
@@ -147,7 +147,7 @@ const Menu = ({ onClose }) => {
                   }
               </ul>
             </div>
-        </Container>
+        </Sidebar>
      );
 }
  
