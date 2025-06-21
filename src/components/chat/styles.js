@@ -4,20 +4,34 @@ import { colors } from "../../utils/colors";
 
 export const Container = styled.div`  
     display: flex;
+    margin: auto;
+
+    height: 100vh;
+    width: 100%;
+
+    @media (min-width: 720px) {
+        height: auto;
+        width: auto;
+    }
 
     .chat-conatiner {
         align-items: flex-start;
         background: ${colors.secondary};
         box-shadow: 5px 5px 17px 1px rgba(0, 0, 0, 0.3);
-        color: #000;
         display: flex;
         flex-direction: column;
-        height: 600px;
+        height: 100vh;
         justify-content: center;
         padding: 20px;
-        width: 420px;
+        width: 100%;
+        z-index: 999;
 
         -webkit-box-shadow: 5px 5px 17px 1px rgba(0, 0, 0, 0.3);
+
+        @media (min-width: 720px) {
+            height: 600px;
+            width: 420px;
+        }
 
         .chat-header {
             align-items: center;

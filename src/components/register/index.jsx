@@ -22,7 +22,6 @@ const Register = () => {
         }, 6000)
         // const username = usernameRef.current.value;
         // username && setChatVisibility(true);
-        
     }
 
     return(
@@ -31,15 +30,15 @@ const Register = () => {
             <form>
                 <div>
                     <label htmlFor="username">User Name</label>
-                    <input type="text" ref={usernameRef} />
+                    <input type="text" aria-label="User Name" ref={usernameRef} />
                 </div>
                 <div>
                     <label htmlFor="password">Password</label>
-                    <input type="password" ref={userpasswordRef} />
+                    <input type="password" aria-label="Password" ref={userpasswordRef} />
                 </div>
                 <div>
                     <label htmlFor="confirm-password">Confirm Password</label>
-                    <input type="password" ref={userpasswordRef} />
+                    <input type="password" aria-label="Confirm Password" ref={userpasswordRef} />
                 </div>
                 <a href="" >Already have an account?</a>
             </form>

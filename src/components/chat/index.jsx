@@ -1,6 +1,9 @@
 /* ⚛ REACT */
 import React, { useEffect, useRef, useState } from "react";
 
+/* 📦 LIBS */
+import { useMediaQuery } from '@react-hook/media-query'
+
 /* 🧩 COMPONENTS */
 import Menu from "../menu";
 
@@ -60,6 +63,8 @@ const mensagens = [
 
 const Chat = () => {
 
+    const isSmallScreen = useMediaQuery('(max-width: 720px)');
+
     const messageInputRef = useRef(null);
     const fileInputRef = useRef(null);
 
@@ -87,35 +92,37 @@ const Chat = () => {
     return(
         <Container>
             {isMenuOpen && <Menu onClose={() => setIsMenuOpen(false)}/>}
-            <div className="chat-conatiner">
-              <div className="chat-header">
-                <MenuIcon src={menu} onClick={() => handleOpenMenu()} title="Open menu"/>
-                <div className="chat-name">
-                   <ChatIcon src={group} />
-                  <h2>Maior nome possível já existente na face da Terra</h2>
+            {(!isSmallScreen || !isMenuOpen) &&
+              <div className="chat-conatiner">
+                <div className="chat-header">
+                  {!isMenuOpen && <MenuIcon src={menu} onClick={() => handleOpenMenu()} title="Open menu"/>}
+                  <div className="chat-name">
+                    <ChatIcon src={group} />
+                    <h2>Maior nome possível já existente na face da Terra</h2>
+                  </div>
+                </div>
+                <div className="chat">
+                    {messages.map((message, index) => (
+                        <div className={`message-container ${message.is_mine && 'message-mine'}`} key={index}>
+                            <div className="message-author"><strong>{message.author}</strong></div>
+                            <div className="message-text">{message.text}</div>
+                        </div>
+                    ))}
+                </div>
+                <div className="input-container">
+                    <div>
+                      <label>
+                        <ClipIcon src={clip} title="Select a file"/>
+                        <input className="hidden-input" type="file" accept="image/*" ref={fileInputRef} />
+                      </label>
+                      <input type="text" placeholder="Message" ref={messageInputRef}/>
+                    </div>
+                    <button onClick={() => handleSubmit()}>
+                        <SendIcon src={send} title="Send message"/>
+                    </button>
                 </div>
               </div>
-              <div className="chat">
-                  {messages.map((message, index) => (
-                      <div className={`message-container ${message.is_mine && 'message-mine'}`} key={index}>
-                          <div className="message-author"><strong>{message.author}</strong></div>
-                          <div className="message-text">{message.text}</div>
-                      </div>
-                  ))}
-              </div>
-              <div className="input-container">
-                  <div>
-                    <label>
-                      <ClipIcon src={clip} title="Select a file"/>
-                      <input className="hidden-input" type="file" accept="image/*" ref={fileInputRef} />
-                    </label>
-                    <input type="text" placeholder="Message" ref={messageInputRef}/>
-                  </div>
-                  <button onClick={() => handleSubmit()}>
-                      <SendIcon src={send} title="Send message"/>
-                  </button>
-              </div>
-            </div>
+            }
         </Container>
     );
 }

@@ -1,13 +1,30 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import SVG from "react-inlinesvg";
 import { colors } from "../../utils/colors";
 
-export const Container = styled.div` 
+const fadeInRight = keyframes`
+  from {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+`;
+
+export const Sidebar = styled.div` 
+    animation: ${fadeInRight} 0.5s ease forwards;
     background: ${colors.primary};
     display: flex;
     flex-direction: row;
-    height: 600px;
-    width: 300px;
+    height: 100vh;
+    width: 100%;
+
+    @media (min-width: 720px) {
+        height: 600px;
+        width: 300px;
+    }
 
     .buttons-container {
         align-items: center;
@@ -75,10 +92,14 @@ export const Container = styled.div`
                     width: 100%;
 
                     span {
-                        max-width: 140px; 
+                        max-width: 260px; 
                         overflow: hidden;
                         text-overflow: ellipsis; 
                         white-space: nowrap;
+
+                        @media (min-width: 720px) {
+                            max-width: 140px; 
+                        }
                     }
                 }
             }
