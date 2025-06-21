@@ -31,11 +31,11 @@ const Join = () => {
             <form>
                 <div>
                     <label htmlFor="username">User Name</label>
-                    <input type="text" ref={usernameRef} placeholder="Type your user name"/>
+                    <input type="text" ref={usernameRef} placeholder="Type your user name" aria-label="User Name"/>
                 </div>
                 <div>
                     <label htmlFor="password">Password</label>
-                    <input type="password" ref={userpasswordRef} placeholder="Type your password"/>
+                    <input type="password" ref={userpasswordRef} placeholder="Type your password" aria-label="Password"/>
                 </div>
                 <a href="" >Create account</a>
             </form>
