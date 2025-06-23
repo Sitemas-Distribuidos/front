@@ -2,9 +2,12 @@
 import { createBrowserRouter } from "react-router";
 
 /* 🧩 COMPONENTS */
-import Join from "../components/join";
-import Register from "../components/register";
-import Chat from "../components/chat";
+import Join from "../pages/join";
+import Register from "../pages/register";
+import Chat from "../pages/chat";
+
+/* 🧭 ROUTES */
+import PrivateRoute from "./privateRoute";
 
 export const router = createBrowserRouter([
   {
@@ -17,6 +20,10 @@ export const router = createBrowserRouter([
   },
   {
     path: "/",
-    element: <Chat />,
+    element: (
+      <PrivateRoute>
+        <Chat />
+      </PrivateRoute>
+    ),
   }
 ]);
