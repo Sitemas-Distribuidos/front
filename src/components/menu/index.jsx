@@ -115,7 +115,7 @@ const Menu = ({ onClose }) => {
 
     return ( 
         <Sidebar>
-            <div className="buttons-container" >
+            <div className="buttons-container">
                 <div className="buttons-container-top">
                     <CloseIcon src={close} onClick={() => onClose()} title="Close menu"/>
                     <AddPersonIcon src={addPerson} title="New person" onClick={() => openModal('ADD')}/>
