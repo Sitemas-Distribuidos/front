@@ -1,5 +1,8 @@
 /* ⚛ REACT */
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
+
+/* 📦 LIBS */
+import { useNavigate } from "react-router";
 
 /* 📁 ASSETS*/
 import { login } from "../../assets/icons";
@@ -8,6 +11,10 @@ import { login } from "../../assets/icons";
 import { Container, Link, LoginIcon } from "./styles";
 
 const Join = () => {
+
+    document.title = "Join";
+
+    let navigate = useNavigate();
 
     const usernameRef = useRef(null);
     const userpasswordRef = useRef(null);
@@ -19,6 +26,7 @@ const Join = () => {
         setTimeout(() => {
             console.log(usernameRef.current.value);
             setIsLoading(false);
+            navigate("/");
         }, 6000)
         // const username = usernameRef.current.value;
         // username && setChatVisibility(true);

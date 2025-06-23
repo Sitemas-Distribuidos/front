@@ -1,26 +1,18 @@
-import styled, { keyframes } from "styled-components";
+/* 📦 LIBS */
+import styled from "styled-components";
 import SVG from "react-inlinesvg";
+import 'animate.css/animate.min.css';
+
+/* 🔧 UTILS */
 import { colors } from "../../utils/colors";
 
-const fadeInRight = keyframes`
-  from {
-    opacity: 0;
-    transform: translateX(100px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-`;
-
 export const Sidebar = styled.div` 
-    animation: ${fadeInRight} 0.5s ease forwards;
     background: ${colors.primary};
     display: flex;
     flex-direction: row;
     height: 100vh;
     width: 100%;
-
+    
     @media (min-width: 720px) {
         height: 600px;
         width: 300px;

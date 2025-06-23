@@ -1,5 +1,8 @@
+/* 📦 LIBS */
 import styled from "styled-components";
 import SVG from "react-inlinesvg";
+
+/* 🔧 UTILS */
 import { colors } from "../../utils/colors";
 
 export const Container = styled.div`
@@ -12,7 +15,7 @@ export const Container = styled.div`
     position: absolute;
     text-align: center;
     width: 120px;
-    z-index: 1;
+    z-index: 9;
 
     button {
         background: transparent;

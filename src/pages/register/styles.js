@@ -1,8 +1,10 @@
+/* 📦 LIBS */
 import styled from "styled-components";
 import SVG from "react-inlinesvg";
-import { colors } from "../../utils/colors";
 import { Link as CustomLink } from "react-router";
 
+/* 🔧 UTILS */
+import { colors } from "../../utils/colors";
 
 export const Container = styled.main`   
     align-items: center;
@@ -12,7 +14,7 @@ export const Container = styled.main`
     display: flex;
     flex-direction: column;
     gap: 20px;
-    height: 320px;
+    height: 380px;
     justify-content: center;
     width: 400px;
 
@@ -37,7 +39,6 @@ export const Container = styled.main`
                 color: ${colors.primary};
                 font-size: 14px;
                 font-weight: 500;
-                margin-bottom: 4px;
             }
             
             input {
@@ -73,10 +74,10 @@ export const Link = styled(CustomLink)`
     }
 `;
 
-export const LoginIcon = styled(SVG)`   
-    height: 18px;
+export const RegisterIcon = styled(SVG)`   
+    height: 20px;
     margin-left: 10px;
-    width: 18px;
+    width: 20px;
 
     & path {
         fill: ${colors.secondary};

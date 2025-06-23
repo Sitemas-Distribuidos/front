@@ -5,7 +5,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useMediaQuery } from '@react-hook/media-query'
 
 /* 🧩 COMPONENTS */
-import Menu from "../menu";
+import Menu from "../../components/menu";
 
 /* 📁 ASSETS*/
 import { send, clip, menu, group } from "../../assets/icons";
@@ -62,6 +62,8 @@ const mensagens = [
 ];
 
 const Chat = () => {
+
+    document.title = "Chat";
 
     const isSmallScreen = useMediaQuery('(max-width: 720px)');
 

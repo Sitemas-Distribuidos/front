@@ -1,5 +1,8 @@
 /* ⚛ REACT */
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
+
+/* 📦 LIBS */
+import { useNavigate } from "react-router";
 
 /* 📁 ASSETS*/
 import { register } from "../../assets/icons";
@@ -8,6 +11,10 @@ import { register } from "../../assets/icons";
 import { Container, Link, RegisterIcon } from "./styles";
 
 const Register = () => {
+
+    document.title = "Register";
+
+    let navigate = useNavigate();
 
     const usernameRef = useRef(null);
     const userpasswordRef = useRef(null);
@@ -19,6 +26,7 @@ const Register = () => {
         setTimeout(() => {
             console.log(usernameRef.current.value);
             setIsLoading(false);
+            navigate("/join");
         }, 6000)
         // const username = usernameRef.current.value;
         // username && setChatVisibility(true);
@@ -40,7 +48,7 @@ const Register = () => {
                     <label htmlFor="confirm-password">Confirm Password</label>
                     <input type="password" aria-label="Confirm Password" ref={userpasswordRef} />
                 </div>
-                <Link to="/" >Already have an account?</Link>
+                <Link to="/join" >Already have an account?</Link>
             </form>
             <button onClick={() => handleSubmit()}>
                 {isLoading ? 'Registering...' : 'Register'}

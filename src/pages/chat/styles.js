@@ -1,12 +1,14 @@
+/* 📦 LIBS */
 import styled from "styled-components";
 import SVG from "react-inlinesvg";
+
+/* 🔧 UTILS */
 import { colors } from "../../utils/colors";
 
 export const Container = styled.div`  
     display: flex;
-    margin: auto;
-
     height: 100vh;
+    margin: auto;
     width: 100%;
 
     @media (min-width: 720px) {
@@ -24,7 +26,6 @@ export const Container = styled.div`
         justify-content: center;
         padding: 20px;
         width: 100%;
-        z-index: 999;
 
         -webkit-box-shadow: 5px 5px 17px 1px rgba(0, 0, 0, 0.3);
 
@@ -59,14 +60,18 @@ export const Container = styled.div`
         .chat {
             display: flex;
             flex-direction: column;
-            height: 550px;
+            height: 100vh;
             margin: 10px 0;
             padding-right: 8px;
             overflow: auto;
             scrollbar-color: ${colors.primary} ${colors.secondary};
             scrollbar-width: thin;
             width: 100%;
-            
+
+            @media (min-width: 720px) {
+                height: 550px;
+            }
+
             .message-container {
                 align-self: start;
                 background-color: lightgrey;
