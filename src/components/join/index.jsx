@@ -5,7 +5,7 @@ import React, { useRef, useState } from "react";
 import { login } from "../../assets/icons";
 
 /* 🎨 STYLES */
-import { Container, LoginIcon } from "./styles";
+import { Container, Link, LoginIcon } from "./styles";
 
 const Join = () => {
 
@@ -37,7 +37,7 @@ const Join = () => {
                     <label htmlFor="password">Password</label>
                     <input type="password" ref={userpasswordRef} placeholder="Type your password" aria-label="Password"/>
                 </div>
-                <a href="" >Create account</a>
+                <Link to="/register" >Create account</Link>
             </form>
             <button onClick={() => handleSubmit()}>
                 {isLoading ? 'Entering...' : 'Enter'}
