@@ -26,7 +26,7 @@ const Join = () => {
         setTimeout(() => {
             console.log(usernameRef.current.value);
             setIsLoading(false);
-            navigate("/chat");
+            navigate("/");
         }, 6000)
         // const username = usernameRef.current.value;
         // username && setChatVisibility(true);
