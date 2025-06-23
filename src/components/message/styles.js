@@ -1,5 +1,8 @@
+/* 📦 LIBS */
 import styled, { keyframes } from "styled-components";
 import SVG from "react-inlinesvg";
+
+/* 🔧 UTILS */
 import { colors } from "../../utils/colors";
 
 const fadeInDown = keyframes` 
