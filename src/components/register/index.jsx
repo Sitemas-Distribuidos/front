@@ -5,7 +5,7 @@ import React, { useRef, useState } from "react";
 import { register } from "../../assets/icons";
 
 /* 🎨 STYLES */
-import { Container, RegisterIcon } from "./styles";
+import { Container, Link, RegisterIcon } from "./styles";
 
 const Register = () => {
 
@@ -40,7 +40,7 @@ const Register = () => {
                     <label htmlFor="confirm-password">Confirm Password</label>
                     <input type="password" aria-label="Confirm Password" ref={userpasswordRef} />
                 </div>
-                <a href="" >Already have an account?</a>
+                <Link to="/" >Already have an account?</Link>
             </form>
             <button onClick={() => handleSubmit()}>
                 {isLoading ? 'Registering...' : 'Register'}
