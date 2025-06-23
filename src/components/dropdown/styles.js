@@ -15,7 +15,7 @@ export const Container = styled.div`
     position: absolute;
     text-align: center;
     width: 120px;
-    z-index: 1;
+    z-index: 9;
 
     button {
         background: transparent;
