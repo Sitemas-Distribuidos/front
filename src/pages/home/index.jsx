@@ -1,3 +1,6 @@
+/* 📦 LIBS */
+import { RouterProvider } from "react-router";
+
 /* 🧩 COMPONENTS */
 import Chat from "../../components/chat";
 import Join from "../../components/join";
@@ -9,8 +12,13 @@ import Message from "../../components/message";
 import { ModalProvider } from "../../context/ModalContext";
 import { MessageProvider } from "../../context/MessageContext";
 
+/* 🧭 ROUTES */
+import { router } from "../../routes";
+
 /* 🎨 STYLES */
 import { Container } from "./styles";
+
+
 
 const Home = () => {
     document.title = "Chat";
@@ -20,9 +28,7 @@ const Home = () => {
             <ModalProvider>
                 <Container>
                     <Message />
-                    {/* <Join /> */}
-                    {/* <Register /> */}
-                    <Chat />
+                    <RouterProvider router={router} />
                     <Modal />
                 </Container>
             </ModalProvider>

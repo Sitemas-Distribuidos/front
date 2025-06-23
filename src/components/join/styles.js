@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import SVG from "react-inlinesvg";
 import { colors } from "../../utils/colors";
+import { Link as CustomLink } from "react-router";
+
 
 export const Container = styled.main`   
     align-items: center;
@@ -47,14 +49,6 @@ export const Container = styled.main`
                 padding-bottom: 6px;
             }
         }
-        a {
-            color: ${colors.primary};
-            font-size: 14px;
-
-            &:visited {
-                color: #CCC5B9;
-            }
-        }
     }
 
     button {
@@ -67,6 +61,15 @@ export const Container = styled.main`
         display: flex;
         outline: none;
         padding: 6px 18px;
+    }
+`;
+
+export const Link = styled(CustomLink)`   
+    color: ${colors.primary};
+    font-size: 14px;
+    
+    &:visited {
+        color: #CCC5B9;
     }
 `;
 
