@@ -1,7 +1,6 @@
 /* 📦 LIBS */
 import styled from "styled-components";
 import SVG from "react-inlinesvg";
-import 'animate.css/animate.min.css';
 
 /* 🔧 UTILS */
 import { colors } from "../../utils/colors";
