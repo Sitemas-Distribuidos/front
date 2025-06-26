@@ -17,6 +17,7 @@ const Register = () => {
     let navigate = useNavigate();
 
     const usernameRef = useRef(null);
+    const useremailRef = useRef(null);
     const userpasswordRef = useRef(null);
 
     const [isLoading, setIsLoading] = useState(false);
@@ -41,14 +42,14 @@ const Register = () => {
                     <input type="text" aria-label="User Name" ref={usernameRef} />
                 </div>
                 <div>
+                    <label htmlFor="email">Confirm Password</label>
+                    <input type="text" aria-label="Email" ref={useremailRef} />
+                </div>
+                <div>
                     <label htmlFor="password">Password</label>
                     <input type="password" aria-label="Password" ref={userpasswordRef} />
                 </div>
-                <div>
-                    <label htmlFor="confirm-password">Confirm Password</label>
-                    <input type="password" aria-label="Confirm Password" ref={userpasswordRef} />
-                </div>
-                <Link to="/join" >Already have an account?</Link>
+                <Link to="/join">Already have an account?</Link>
             </form>
             <button onClick={() => handleSubmit()}>
                 {isLoading ? 'Registering...' : 'Register'}
