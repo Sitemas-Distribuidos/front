@@ -7,7 +7,7 @@ import Register from "../pages/register";
 import Chat from "../pages/chat";
 
 /* 🧭 ROUTES */
-import PrivateRoute from "./privateRoute";
+import PrivateRoute from "./PrivateRoute";
 
 export const router = createBrowserRouter([
   {
