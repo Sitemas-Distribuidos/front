@@ -1,5 +1,5 @@
 /* ⚛ REACT */
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 
 /* 📦 LIBS */
 import { useNavigate } from "react-router";
@@ -20,18 +20,31 @@ const Join = () => {
     const userpasswordRef = useRef(null);
 
     const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState({
+        username: "",
+        password: ""
+    })
 
     const handleSubmit = async () => {
         setIsLoading(true);
         setTimeout(() => {
-            console.log(usernameRef.current.value);
-            setIsLoading(false);
+            const username = usernameRef.current.value;
+            const password = userpasswordRef.current.value;
+            
+            const newError = {};
+            if (!username) newError.username = "Campo obrigatório";
+            if (!password) newError.password = "Campo obrigatório";
+
+            if (Object.keys(newError).length > 0) {
+                setError(prev => ({ ...prev, ...newError }));
+                setIsLoading(false);
+                return;
+            }
+
             navigate("/");
-        }, 6000)
-        // const username = usernameRef.current.value;
-        // username && setChatVisibility(true);
-        
+        }, 3000)
     }
+
 
     return(
         <Container>
@@ -39,11 +52,13 @@ const Join = () => {
             <form>
                 <div>
                     <label htmlFor="username">User Name</label>
-                    <input type="text" ref={usernameRef} placeholder="Type your user name" aria-label="User Name"/>
+                    <input type="text" ref={usernameRef} aria-label="User Name"/>
+                    {error.username && <span>{error.username}</span>}
                 </div>
                 <div>
                     <label htmlFor="password">Password</label>
-                    <input type="password" ref={userpasswordRef} placeholder="Type your password" aria-label="Password"/>
+                    <input type="password" ref={userpasswordRef} aria-label="Password"/>
+                    {error.password && <span>{error.password}</span>}
                 </div>
                 <Link to="/register" >Create account</Link>
             </form>
