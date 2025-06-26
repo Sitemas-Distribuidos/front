@@ -6,7 +6,7 @@ import Join from "../pages/join";
 import Register from "../pages/register";
 import Chat from "../pages/chat";
 
-/* 🧭 ROUTES */
+/* 🧭 ROUTEs */
 import PrivateRoute from "./privateRoute";
 
 export const router = createBrowserRouter([
