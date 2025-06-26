@@ -20,10 +20,11 @@ export const router = createBrowserRouter([
   },
   {
     path: "/",
-    element: (
-      <PrivateRoute>
-        <Chat />
-      </PrivateRoute>
-    ),
+    element: <Chat />,
+    // element: (
+    //   <PrivateRoute>
+    //     <Chat />
+    //   </PrivateRoute>
+    // ),
   }
 ]);
