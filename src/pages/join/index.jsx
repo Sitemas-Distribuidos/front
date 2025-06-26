@@ -39,13 +39,13 @@ const Join = () => {
             <form>
                 <div>
                     <label htmlFor="username">User Name</label>
-                    <input type="text" ref={usernameRef} placeholder="Type your user name" aria-label="User Name"/>
+                    <input type="text" ref={usernameRef} aria-label="User Name"/>
                 </div>
                 <div>
                     <label htmlFor="password">Password</label>
-                    <input type="password" ref={userpasswordRef} placeholder="Type your password" aria-label="Password"/>
+                    <input type="password" ref={userpasswordRef} aria-label="Password"/>
                 </div>
-                <Link to="/register" >Create account</Link>
+                <Link to="/register">Create account</Link>
             </form>
             <button onClick={() => handleSubmit()}>
                 {isLoading ? 'Entering...' : 'Enter'}
