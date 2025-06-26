@@ -49,6 +49,13 @@ export const Container = styled.main`
                 outline: none;
                 padding-bottom: 6px;
             }
+
+            span {
+                color: ${colors.error};
+                font-size: 12px;
+                margin-top: 6px;
+                text-align: center;
+            }
         }
     }
 
