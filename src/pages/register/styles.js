@@ -28,7 +28,7 @@ export const Container = styled.main`
         align-items: center;    
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        gap: 12px;
         justify-content: center;
         width: 100%;
 
@@ -49,33 +49,27 @@ export const Container = styled.main`
                 outline: none;
                 padding-bottom: 6px;
             }
-
-            span {
-                color: ${colors.error};
-                font-size: 12px;
-                margin-top: 6px;
-                text-align: center;
-            }
         }
-    }
 
-    button {
-        align-items: center;
-        background: ${colors.primary};
-        border: none;
-        border-radius: 5px;
-        color: ${colors.secondary};
-        cursor: pointer;
-        display: flex;
-        outline: none;
-        padding: 6px 18px;
+        button {
+            align-items: center;
+            background: ${colors.primary};
+            border: none;
+            border-radius: 5px;
+            color: ${colors.secondary};
+            cursor: pointer;
+            display: flex;
+            outline: none;
+            padding: 6px 18px;
+        }
     }
 `;
 
 export const Link = styled(CustomLink)`   
     color: ${colors.primary};
     font-size: 14px;
-    
+    text-align: center;
+
     &:visited {
         color: #CCC5B9;
     }
