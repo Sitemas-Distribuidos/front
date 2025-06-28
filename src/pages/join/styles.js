@@ -29,10 +29,10 @@ export const Container = styled.main`
         align-items: center;    
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        gap: 12px;
         justify-content: center;
         width: 100%;
-
+     
         div {
             display: flex;
             flex-direction: column;
@@ -52,25 +52,25 @@ export const Container = styled.main`
                 padding-bottom: 6px;
             }
         }
-    }
-
-    button {
-        align-items: center;
-        background: ${colors.primary};
-        border: none;
-        border-radius: 5px;
-        color: ${colors.secondary};
-        cursor: pointer;
-        display: flex;
-        outline: none;
-        padding: 6px 18px;
+        
+        button {
+            align-items: center;
+            background: ${colors.primary};
+            border: none;
+            border-radius: 5px;
+            color: ${colors.secondary};
+            cursor: pointer;
+            display: flex;
+            outline: none;
+            padding: 6px 18px;
+        }
     }
 `;
 
 export const Link = styled(CustomLink)`   
     color: ${colors.primary};
     font-size: 14px;
-    
+    text-align: center;
     &:visited {
         color: #CCC5B9;
     }
