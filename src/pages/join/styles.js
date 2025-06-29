@@ -6,7 +6,6 @@ import { Link as CustomLink } from "react-router";
 /* 🔧 UTILS */
 import { colors } from "../../utils/colors";
 
-
 export const Container = styled.main`   
     align-items: center;
     background: ${colors.secondary};
@@ -15,7 +14,7 @@ export const Container = styled.main`
     display: flex;
     flex-direction: column;
     gap: 20px;
-    height: 320px;
+    height: 300px;
     justify-content: center;
     width: 400px;
 
