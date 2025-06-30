@@ -1,8 +1,11 @@
+import { useState } from 'react';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 
 const SOCKET_URL = import.meta.env.VITE_BACKEND_WS;
 
 export const useSocket = (path = '') => {
+  const [socketData, setSocketData] = useState(null);
+
   const { sendMessage, lastMessage, lastJsonMessage, readyState } = useWebSocket(
     `${SOCKET_URL}${path}`,
     {
@@ -11,11 +14,12 @@ export const useSocket = (path = '') => {
         if(!message) return;
         const data = JSON.parse(message.data);
         if (data) {
-          console.log(data);
+          // console.log(data);
+          setSocketData(data);
         }
       },
       onError: (event) => { console.error(event); },
-      onClose: (close) => {console.log(close);},
+      onClose: (close) => { console.log(close); },
       shouldReconnect: () => true, // reconecta automaticamente
       reconnectAttempts: 10,
       reconnectInterval: 2000,
@@ -36,5 +40,6 @@ export const useSocket = (path = '') => {
     lastJsonMessage,
     readyState,
     connectionStatus,
+    socketData,
   };
 };
