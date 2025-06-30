@@ -37,20 +37,18 @@ const Join = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         setIsLoading(true);
-        setTimeout(() => {
-            if (validateUsername(usernameRef.current.value)) {
-                sendMessage(JSON.stringify({
-                    channel: "user",
-                    method: "GET",
-                    username: usernameRef.current.value,
-                }));
-                navigate("/");
-                showMessage('success', 'Successfully login!'); 
-            } else {
-               showMessage('error', 'Invalid user'); 
-            }
-            setIsLoading(false);
-        }, 2000)
+        if (validateUsername(usernameRef.current.value)) {
+            sendMessage(JSON.stringify({
+                channel: "user",
+                method: "GET",
+                username: usernameRef.current.value,
+            }));
+            navigate("/");
+            showMessage('success', 'Successfully login!'); 
+        } else {
+            showMessage('error', 'Invalid user'); 
+        }
+        setIsLoading(false);
     }
 
     return(
