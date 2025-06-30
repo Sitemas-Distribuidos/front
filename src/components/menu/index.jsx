@@ -1,6 +1,9 @@
 /* ⚛ REACT */
 import React, { useEffect, useState, useContext, useRef } from "react";
 
+/* 📦 LIBS */
+import { useNavigate } from "react-router";
+
 /* 🧩 COMPONENTS */
 import Dropdown from "../dropdown";
 
@@ -74,6 +77,8 @@ const contatos = [
 
 const Menu = ({ onClose }) => {
 
+    let navigate = useNavigate();
+
     const { openModal } = useContext(ModalContext);
 
     // const searchInputRef = useRef(null);
@@ -83,7 +88,6 @@ const Menu = ({ onClose }) => {
     const [openDropdown, setOpenDropdown] = useState(null);
     const [contacts, setContacts] = useState([]);
     const [searchChat, setSearchChat] = useState('');
-
 
     useEffect(() => {
         setContacts(contatos);
@@ -101,7 +105,7 @@ const Menu = ({ onClose }) => {
         };
     }, []);
 
-    const contatosFiltrados = contacts.filter((contact) =>
+    const filteredContact = contacts.filter((contact) =>
         contact.chat_name.toLowerCase().includes(searchChat.toLowerCase())
     );
 
@@ -110,7 +114,8 @@ const Menu = ({ onClose }) => {
     };
 
     const handleLogout = () => {
-        console.log('logout')
+      localStorage.removeItem('user_id');
+      navigate("/join");
     }
 
     return ( 
@@ -129,7 +134,7 @@ const Menu = ({ onClose }) => {
                   <input type="text" onChange={e => setSearchChat(e.target.value)} placeholder="Search"/>
               </div>
               <ul>
-                  {contatosFiltrados.map((contact, index) => (
+                  {filteredContact.map((contact, index) => (
                       <li key={index}>
                           <ChatIcon src={contact.type === "group" ?  group : person}/>
                           <div className="contact-info">
