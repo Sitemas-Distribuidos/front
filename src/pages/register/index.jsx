@@ -38,23 +38,22 @@ const Register = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         setIsLoading(true);
-        setTimeout(() => {
-            if (validateUsername(usernameRef.current.value) && validateName(nameRef.current.value) && validateEmail(emailRef.current.value)) {
-                console.log('passou em tudo')
-                sendMessage(JSON.stringify({
-                    channel: "user",
-                    method: "POST",
-                    name: nameRef.current.value,
-                    username: usernameRef.current.value,
-                    email: emailRef.current.value,
-                }));
-                navigate("/join");
-                showMessage('success', 'Successfully registered user!'); 
-            } else {
-                showMessage('error', 'Invalid user'); 
-            }
-            setIsLoading(false);
-        }, 2000)
+
+        if (validateUsername(usernameRef.current.value) && validateName(nameRef.current.value) && validateEmail(emailRef.current.value)) {
+            console.log('passou em tudo')
+            sendMessage(JSON.stringify({
+                channel: "user",
+                method: "POST",
+                name: nameRef.current.value,
+                username: usernameRef.current.value,
+                email: emailRef.current.value,
+            }));
+            navigate("/join");
+            showMessage('success', 'Successfully registered user!'); 
+        } else {
+            showMessage('error', 'Invalid user'); 
+        }
+        setIsLoading(false);
     }
 
     return(
