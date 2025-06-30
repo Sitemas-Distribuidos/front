@@ -4,6 +4,7 @@ import useWebSocket, { ReadyState } from 'react-use-websocket';
 const SOCKET_URL = import.meta.env.VITE_BACKEND_WS;
 
 export const useSocket = (path = '') => {
+
   const [socketData, setSocketData] = useState(null);
 
   const { sendMessage, lastMessage, lastJsonMessage, readyState } = useWebSocket(
