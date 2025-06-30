@@ -1,8 +1,11 @@
 /* ⚛ REACT */
-import { useRef, useState } from "react";
+import { useRef, useState, useContext } from "react";
 
 /* 📦 LIBS */
 import { useNavigate } from "react-router";
+
+/* 🧠 CONTEXT */
+import { MessageContext } from '../../context/MessageContext';
 
 /* 📁 ASSETS*/
 import { register } from "../../assets/icons";
@@ -16,27 +19,33 @@ const Register = () => {
 
     let navigate = useNavigate();
 
+    const { showMessage } = useContext(MessageContext);
+
     const usernameRef = useRef(null);
     const useremailRef = useRef(null);
     const userpasswordRef = useRef(null);
 
     const [isLoading, setIsLoading] = useState(false);
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (e) => {
+        e.preventDefault();
         setIsLoading(true);
         setTimeout(() => {
-            console.log(usernameRef.current.value);
+            if (useremailRef.current.value && useremailRef.current.value && userpasswordRef.current.value) {
+                console.log(usernameRef.current.value);
+                navigate("/join");
+                showMessage('success', 'Successfully registered user!'); 
+            } else {
+                showMessage('error', 'Invalid user'); 
+            }
             setIsLoading(false);
-            navigate("/join");
-        }, 6000)
-        // const username = usernameRef.current.value;
-        // username && setChatVisibility(true);
+        }, 2000)
     }
 
     return(
         <Container>
             <h1>Register</h1>
-            <form>
+            <form onSubmit={e => handleSubmit(e)}>
                 <div>
                     <label htmlFor="username">User Name</label>
                     <input type="text" aria-label="User Name" ref={usernameRef} />
@@ -50,11 +59,11 @@ const Register = () => {
                     <input type="password" aria-label="Password" ref={userpasswordRef} />
                 </div>
                 <Link to="/join">Already have an account?</Link>
+                <button type="submit" onClick={() => handleSubmit()}>
+                    {isLoading ? 'Registering...' : 'Register'}
+                    <RegisterIcon src={register} />
+                </button>
             </form>
-            <button onClick={() => handleSubmit()}>
-                {isLoading ? 'Registering...' : 'Register'}
-                <RegisterIcon src={register} />
-            </button>
         </Container>
     );
 }

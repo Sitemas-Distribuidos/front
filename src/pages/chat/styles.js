@@ -71,6 +71,17 @@ export const Container = styled.div`
             @media (min-width: 720px) {
                 height: 550px;
             }
+            
+            div {
+                display: flex;
+                flex-direction: column;
+
+                span {
+                    color: ${colors.secondary};
+                    font-size: 10px;
+                    text-align: end;
+                }
+            }
 
             .message-container {
                 align-self: start;
