@@ -32,36 +32,6 @@ const contatos = [
     chat_name: "Vinizaum",
     type: "person"
   },
-  {
-    id: 5,
-    chat_name: "Ricando",
-    type: "person"
-  },
-  {
-    id: 6,
-    chat_name: "Mikamel",
-    type: "person"
-  },
-  {
-    id: 7,
-    chat_name: "C.E.O.",
-    type: "person"
-  },
-  {
-    id: 8,
-    chat_name: "Fulano",
-    type: "person"
-  },
-  {
-    id: 9,
-    chat_name: "Ciclano",
-    type: "person"
-  },
-  {
-    id: 10,
-    chat_name: "Beltrano",
-    type: "person"
-  },
 ];
 
 const Create = () => {
@@ -100,8 +70,12 @@ const Create = () => {
     return (
         <Container>
             <h1>Create Group</h1>
-            <input type="text" placeholder="Type group name" />
+            <div className="input-container">
+                <label htmlFor="group-name">Group Name</label>
+              <input type="text" id="group-name" placeholder="" />
+            </div>
             <ul>
+                <h3>Contact List</h3>
                 {contacts.map((contact, index) => (
                     <li key={index}>
                         <PersonIcon src={person} />
