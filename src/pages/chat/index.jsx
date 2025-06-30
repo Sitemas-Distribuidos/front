@@ -17,46 +17,55 @@ const mensagens = [
   {
     author: "João",
     text: "E aí, tudo certo?",
+    hour: "5pm",
     is_mine: true
   },
   {
     author: "Dionys",
     text: "Tudo sim! E contigo?",
+    hour: "5pm",
     is_mine: false
   },
   {
     author: "Knosh",
     text: "Bora marcar aquele rolê no finde?",
+    hour: "5pm",
     is_mine: false
   },
   {
     author: "Thiago",
     text: "Tô dentro! Que horas?",
+    hour: "5pm",
     is_mine: false
   },
   {
     author: "João",
     text: "Às 17h fica bom para todos?",
+    hour: "5pm",
     is_mine: true
   },
   {
     author: "Mikamel",
     text: "Onde vai ser?",
+    hour: "5pm",
     is_mine: false
   },
   {
     author: "Vinizaum",
     text: "Vai ser na casa do Ryan",
+    hour: "5pm",
     is_mine: false
   },
   {
     author: "C.E.O.",
     text: "Não esqueçam de levar as bebidas!",
+    hour: "5pm",
     is_mine: false
   },
   {
     author: "Ryan",
     text: "Claro, vou levar cerveja!",
+    hour: "5pm",
     is_mine: false
   },
 ];
@@ -108,6 +117,7 @@ const Chat = () => {
                         <div className={`message-container ${message.is_mine && 'message-mine'}`} key={index}>
                             <div className="message-author"><strong>{message.author}</strong></div>
                             <div className="message-text">{message.text}</div>
+                            <span>{message.hour}</span>
                         </div>
                     ))}
                 </div>
