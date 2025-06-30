@@ -11,63 +11,15 @@ import { add, person, remove, search } from "../../assets/icons";
 /* 🎨 STYLES */
 import { Container, AddIcon, PersonIcon, AddOrRemoveIcon, SearchIcon } from "./styles";
 
-const contatos = [
-  {
-    id: 1,
-    chat_name: "Alicia",
-    type: "person"
-  },
-  {
-    id: 2,
-    chat_name: "Ryan",
-    type: "person"
-  },
-  {
-    id: 3,
-    chat_name: "Knosh",
-    type: "person"
-  },
-  {
-    id: 4,
-    chat_name: "Vinizaum",
-    type: "person"
-  },
-  {
-    id: 5,
-    chat_name: "Ricando",
-    type: "person"
-  },
-  {
-    id: 6,
-    chat_name: "Mikamel",
-    type: "person"
-  },
-  {
-    id: 7,
-    chat_name: "C.E.O.",
-    type: "person"
-  },
-  {
-    id: 8,
-    chat_name: "Fulano",
-    type: "person"
-  },
-  {
-    id: 9,
-    chat_name: "Ciclano",
-    type: "person"
-  },
-  {
-    id: 10,
-    chat_name: "Beltrano",
-    type: "person"
-  },
-];
+/* 🔗 SERVICE */
+import { useSocket } from '../../hooks/useSocket';
 
 const Add = () => {
 
     const { closeModal } = useContext(ModalContext);
     const { showMessage } = useContext(MessageContext);
+
+    const { sendMessage, socketData } = useSocket();
 
     const [isLoading, setIsLoading] = useState(false);
     const [isPlusIcon, setIsPlusIcon] = useState(true);
@@ -75,12 +27,30 @@ const Add = () => {
     const [selected, setSelected] = useState([]);
     const [searchUser, setSearchUser] = useState('');
 
+    let user_id = localStorage.getItem("user_id");
+
     useEffect(() => {
-        setContacts(contatos);
+        sendMessage(JSON.stringify({
+            channel: "user",
+            method: "GET-all",
+        }));
     }, []);
 
-    const filteredUsers = contacts.filter((contact) =>
-        contact.chat_name.toLowerCase().includes(searchUser.toLowerCase())
+    useEffect(() => {
+        if (socketData) {
+           const usuariosFormatados = socketData.users?.map(user => ({ // alterar nome 
+            id: user.ID,
+            name: user.Name,
+            username: user.Username,
+            email: user.Email,
+          }));
+
+          setContacts(usuariosFormatados);
+        }
+    }, [socketData]);
+
+    const filteredUsers = contacts?.filter((contact) =>
+        contact.username.toLowerCase().includes(searchUser.toLowerCase())
     );
 
     const handleChange = (index) => {
@@ -93,12 +63,18 @@ const Add = () => {
     }  
 
     const handleSubmit = () => {
-        setIsLoading(true);
-        setTimeout(() => {
-            setIsLoading(false);
-            closeModal();
-            showMessage('warning', 'Contact added successfully!');
-        }, 3000); 
+      setIsLoading(true);
+        sendMessage(JSON.stringify({
+            channel: "user",
+            method: "PATCH",
+            _id: user_id,
+            newContact_id: selected[0],
+        }));
+      setTimeout(() => {
+        closeModal();
+      }, 5000);
+      showMessage('warning', 'Contact added successfully!');
+      setIsLoading(false);
     }
 
     return (
@@ -114,8 +90,8 @@ const Add = () => {
                     <li key={index}>
                         <PersonIcon src={person} />
                         <div className="contact-info">
-                            <span>{contact.chat_name}</span>
-                            <AddOrRemoveIcon src={selected.includes(index) ? remove : add} onClick={() => handleChange(index)}/>
+                            <span>{contact.username}</span>
+                            <AddOrRemoveIcon src={selected.includes(contact.id) ? remove : add} onClick={() => handleChange(contact.id)}/>
                         </div>
                     </li>
                 ))}
