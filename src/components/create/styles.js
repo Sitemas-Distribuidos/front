@@ -17,12 +17,15 @@ export const Container = styled.div`
         color: ${colors.secondary};
     }
 
-    input {
-        border: none;
-        border-bottom: 2px solid ${colors.secondary};
-        outline: none;
-        padding: 10px;
-        width: 100%;
+    .input-container {
+        width: 85%;
+        input {
+            border: none;
+            border-bottom: 2px solid ${colors.secondary};
+            outline: none;
+            padding: 10px;
+            width: 100%;
+        }
     }
 
     ul {
@@ -34,6 +37,10 @@ export const Container = styled.div`
         padding: 0 10px;
         scrollbar-width: thin;
         width: 100%;
+
+        h3 {
+            color: ${colors.secondary};
+        }
 
         li {
             align-items: center;
