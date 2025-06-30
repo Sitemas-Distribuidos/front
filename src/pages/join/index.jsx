@@ -1,5 +1,5 @@
 /* ⚛ REACT */
-import { useRef, useState, useContext } from "react";
+import { useRef, useState, useContext, useEffect } from "react";
 
 /* 📦 LIBS */
 import { useNavigate } from "react-router";
@@ -25,7 +25,7 @@ const Join = () => {
 
     let navigate = useNavigate();
 
-    const { showMessage } = useContext(MessageContext);
+    const { showMessage, socketData } = useContext(MessageContext);
 
     const { sendMessage } = useSocket();
 
@@ -43,13 +43,20 @@ const Join = () => {
                 method: "GET",
                 username: usernameRef.current.value,
             }));
-            navigate("/");
+            console.log(socketData)
+            // navigate("/");
             showMessage('success', 'Successfully login!'); 
         } else {
             showMessage('error', 'Invalid user'); 
         }
         setIsLoading(false);
     }
+
+    useEffect(() => {
+    if (socketData) {
+        console.log('⚡️ Nova data recebida:', socketData);
+    }
+    }, [socketData]);
 
     return(
         <Container>
