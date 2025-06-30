@@ -52,10 +52,15 @@ const Join = () => {
         setIsLoading(false);
     }
 
-    useEffect(() => {
-    if (socketData) {
-        console.log('⚡️ Nova data recebida:', socketData);
+    const handleLogin = (response) => {
+        console.log(response)
     }
+
+    useEffect(() => {
+
+        console.log(socketData)
+        // handleLogin(socketData)
+    
     }, [socketData]);
 
     return(
