@@ -2,10 +2,13 @@
 import React, { useEffect, useRef, useState } from "react";
 
 /* 📦 LIBS */
-import { useMediaQuery } from '@react-hook/media-query'
+import { useMediaQuery } from "@react-hook/media-query";
 
 /* 🧩 COMPONENTS */
 import Menu from "../../components/menu";
+
+/* 🔗 SERVICE */
+import { useSocket } from '../../hooks/useSocket';
 
 /* 📁 ASSETS*/
 import { send, clip, menu, group } from "../../assets/icons";
@@ -14,60 +17,7 @@ import { send, clip, menu, group } from "../../assets/icons";
 import { Container, SendIcon, ClipIcon, MenuIcon, ChatIcon } from "./styles";
 
 const mensagens = [
-  {
-    author: "João",
-    text: "E aí, tudo certo?",
-    hour: "5pm",
-    is_mine: true
-  },
-  {
-    author: "Dionys",
-    text: "Tudo sim! E contigo?",
-    hour: "5pm",
-    is_mine: false
-  },
-  {
-    author: "Knosh",
-    text: "Bora marcar aquele rolê no finde?",
-    hour: "5pm",
-    is_mine: false
-  },
-  {
-    author: "Thiago",
-    text: "Tô dentro! Que horas?",
-    hour: "5pm",
-    is_mine: false
-  },
-  {
-    author: "João",
-    text: "Às 17h fica bom para todos?",
-    hour: "5pm",
-    is_mine: true
-  },
-  {
-    author: "Mikamel",
-    text: "Onde vai ser?",
-    hour: "5pm",
-    is_mine: false
-  },
-  {
-    author: "Vinizaum",
-    text: "Vai ser na casa do Ryan",
-    hour: "5pm",
-    is_mine: false
-  },
-  {
-    author: "C.E.O.",
-    text: "Não esqueçam de levar as bebidas!",
-    hour: "5pm",
-    is_mine: false
-  },
-  {
-    author: "Ryan",
-    text: "Claro, vou levar cerveja!",
-    hour: "5pm",
-    is_mine: false
-  },
+
 ];
 
 const Chat = () => {
@@ -75,6 +25,8 @@ const Chat = () => {
     document.title = "Chat";
 
     const isSmallScreen = useMediaQuery('(max-width: 720px)');
+
+    const { sendMessage, socketData } = useSocket();
 
     const messageInputRef = useRef(null);
     const fileInputRef = useRef(null);
