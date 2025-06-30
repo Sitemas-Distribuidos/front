@@ -25,10 +25,6 @@ const Join = () => {
     const userpasswordRef = useRef(null);
 
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState({
-        username: "",
-        password: ""
-    })
 
     const handleSubmit = async (e) => {
         e.preventDefault();
