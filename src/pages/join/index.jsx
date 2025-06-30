@@ -33,6 +33,10 @@ const Join = () => {
     // const passwordRef = useRef(null);
 
     const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState({
+        username: "",
+        password: ""
+    })
 
     const handleSubmit = (e) => {
         e.preventDefault();
