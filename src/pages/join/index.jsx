@@ -25,9 +25,9 @@ const Join = () => {
 
     let navigate = useNavigate();
 
-    const { showMessage, socketData } = useContext(MessageContext);
+    const { showMessage } = useContext(MessageContext);
 
-    const { sendMessage } = useSocket();
+    const { sendMessage, socketData } = useSocket();
 
     const usernameRef = useRef(null);
     // const passwordRef = useRef(null);
@@ -43,24 +43,25 @@ const Join = () => {
                 method: "GET",
                 username: usernameRef.current.value,
             }));
-            console.log(socketData)
-            // navigate("/");
-            showMessage('success', 'Successfully login!'); 
         } else {
             showMessage('error', 'Invalid user'); 
         }
         setIsLoading(false);
+        
     }
 
     const handleLogin = (response) => {
-        console.log(response)
+        if (response?.message.toLowerCase() === "username founded") {
+            localStorage.setItem('user_id', response._id);
+            navigate("/");
+            showMessage('success', 'Successfully login!'); 
+        }
     }
 
     useEffect(() => {
-
-        console.log(socketData)
-        // handleLogin(socketData)
-    
+        if (socketData) {
+            handleLogin(socketData);
+        }
     }, [socketData]);
 
     return(
