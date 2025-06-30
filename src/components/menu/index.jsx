@@ -16,6 +16,9 @@ import { close, logout, group, person, search, addPerson, addGroup, more } from 
 /* 🎨 STYLES */
 import { Sidebar, CloseIcon, LogoutIcon, ChatIcon, SearchIcon, AddPersonIcon, AddGroupIcon, MoreIcon } from "./styles";
 
+/* 🔗 SERVICE */
+import { useSocket } from '../../hooks/useSocket';
+
 const contatos = [
   {
     chat_name: "Grupo 1",
@@ -81,7 +84,11 @@ const Menu = ({ onClose }) => {
 
     const { openModal } = useContext(ModalContext);
 
+    const { sendMessage, socketData } = useSocket();
+
     // const searchInputRef = useRef(null);
+
+    let user_id = localStorage.getItem("user_id");
 
     const dropdownRef = useRef(null);
 
@@ -98,6 +105,12 @@ const Menu = ({ onClose }) => {
           }
         };
 
+        sendMessage(JSON.stringify({
+            channel: "user",
+            method: "GET-contacts",
+            _id: user_id,
+        }));
+
         document.addEventListener('mousedown', handleClickOutside);
 
         return () => {
@@ -105,9 +118,21 @@ const Menu = ({ onClose }) => {
         };
     }, []);
 
-    const filteredContact = contacts.filter((contact) =>
-        contact.chat_name.toLowerCase().includes(searchChat.toLowerCase())
-    );
+    useEffect(() => {
+        if (socketData) {
+          console.log(socketData)
+           const usuariosFormatados = socketData.contacts?.map(user => ({ // alterar nome 
+            id: user._id,
+            username: user.username,
+          }));
+
+          setContacts(usuariosFormatados);
+        }
+    }, [socketData]);
+
+    // const filteredContact = contacts?.filter((contact) =>
+    //     contact?.username.toLowerCase().includes(searchChat.toLowerCase())
+    // );
 
     const handleToggle = (index) => {
       setOpenDropdown((prev) => (prev === index ? null : index));
@@ -134,11 +159,11 @@ const Menu = ({ onClose }) => {
                   <input type="text" onChange={e => setSearchChat(e.target.value)} placeholder="Search"/>
               </div>
               <ul>
-                  {filteredContact.map((contact, index) => (
+                  {contacts.map((contact, index) => (
                       <li key={index}>
                           <ChatIcon src={contact.type === "group" ?  group : person}/>
                           <div className="contact-info">
-                            <span>{contact.chat_name}</span>
+                            <span>{contact.username}</span>
                             <div ref={openDropdown === index ? dropdownRef : null}>
                               <MoreIcon src={more} title="More options" onClick={() => handleToggle(index)}/>
                               {openDropdown === index && (
