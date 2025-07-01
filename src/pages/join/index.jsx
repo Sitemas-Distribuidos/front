@@ -1,8 +1,11 @@
 /* ⚛ REACT */
-import { useRef, useState, useContext } from "react";
+import { useRef, useState, useContext, useEffect } from "react";
 
 /* 📦 LIBS */
 import { useNavigate } from "react-router";
+
+/* 🔗 SERVICE */
+import { useSocket } from '../../hooks/useSocket';
 
 /* 🧠 CONTEXT */
 import { MessageContext } from '../../context/MessageContext';
@@ -13,6 +16,9 @@ import { login } from "../../assets/icons";
 /* 🎨 STYLES */
 import { Container, Link, LoginIcon } from "./styles";
 
+/* 🔧 UTILS */
+import { validateUsername } from '../../utils/validation';
+
 const Join = () => {
 
     document.title = "Join";
@@ -21,26 +27,43 @@ const Join = () => {
 
     const { showMessage } = useContext(MessageContext);
 
+    const { sendMessage, socketData } = useSocket();
+
     const usernameRef = useRef(null);
-    const userpasswordRef = useRef(null);
+    // const passwordRef = useRef(null);
 
     const [isLoading, setIsLoading] = useState(false);
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         setIsLoading(true);
-        setTimeout(() => {
-            if (usernameRef.current.value && userpasswordRef.current.value) {
-                console.log(usernameRef.current.value);
-                navigate("/");
-                showMessage('success', 'Successfully login!'); 
-            } else {
-               showMessage('error', 'Invalid user'); 
-            }
-            setIsLoading(false);
-        }, 2000)
+        if (validateUsername(usernameRef.current.value)) {
+            sendMessage(JSON.stringify({
+                channel: "user",
+                method: "GET",
+                username: usernameRef.current.value,
+            }));
+        } else {
+            showMessage('error', 'Invalid user'); 
+        }
+        setIsLoading(false);
+        
     }
 
+    const handleLogin = (response) => {
+        if (response?.message.toLowerCase() === "username founded") {
+            localStorage.setItem('user_id', response._id);
+            localStorage.setItem('user_name', usernameRef.current.value);
+            navigate("/");
+            showMessage('success', 'Successfully login!');
+        }
+    }
+
+    useEffect(() => {
+        if (socketData) {
+            handleLogin(socketData);
+        }
+    }, [socketData]);
 
     return(
         <Container>
@@ -50,10 +73,10 @@ const Join = () => {
                     <label htmlFor="username">User Name</label>
                     <input type="text" ref={usernameRef} aria-label="User Name"/>
                 </div>
-                <div>
+                {/* <div>
                     <label htmlFor="password">Password</label>
                     <input type="password" ref={userpasswordRef} aria-label="Password"/>
-                </div>
+                </div> */}
                 <Link to="/register">Create account</Link>    
                 <button type="submit">
                     {isLoading ? 'Entering...' : 'Enter'}

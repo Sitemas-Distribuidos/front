@@ -96,7 +96,7 @@ export const Container = styled.div`
 
             .message-mine{
                 align-self: end;
-                background-color: skyblue;
+                background: #D8A47F;
                 color: ${colors.secondary};
             }
         }

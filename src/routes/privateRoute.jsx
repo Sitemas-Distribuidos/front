@@ -1,7 +1,7 @@
 import { Navigate } from "react-router";
 
 const PrivateRoute = ({ children }) => {
-  const isAuthenticated = localStorage.getItem("token");
+  const isAuthenticated = localStorage.getItem("user_id");
 
   return isAuthenticated ? children : <Navigate to="/join" />;
 };

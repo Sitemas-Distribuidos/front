@@ -1,40 +1,75 @@
 /* ⚛ REACT */
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState, useEffect} from 'react';
+import { useSocket } from '../hooks/useSocket';
 
 const MessageContext = createContext();
 
 const MessageProvider = ({ children }) => {
+  const [messages, setMessages] = useState([]);
+  const { sendMessage, socketData, connectionStatus } = useSocket('');
 
-    const [messages, setMessages] = useState([]);
-  
-    const showMessage = (type, content = null) => {
+  const [chatID, setChatID] = useState(null);
 
-      if (!type || !content) {
-        console.error("Type and content are required to show a message.");
-        return;
-      }
+  useEffect(() => {
+    if (chatID && connectionStatus === 'Conectado') {
+      sendMessage(JSON.stringify({
+        channel: "messages",
+        method: "GET",
+        chatId: chatID,
+      }));
+    }
+  }, [chatID, connectionStatus, sendMessage]);
 
-      const id = Date.now();
+  useEffect(() => {
+    if (socketData?.type === "messageList" && Array.isArray(socketData.msg)) {
+      setMessages(socketData.msg);
+      console.log("MESSAGES: ",socketData.msg)
+    }
+    if (socketData?.msg == null && socketData?.type === "messageList"){
+      setMessages([]);
+    }
+  }, [socketData]);
 
-      const newMessage = {
-        id,
-        type,
-        content,
-      };
+  const showMessage = (type, content = null) => {
 
-      setMessages((prev) => [...prev, newMessage]);
+    if (!type || !content) {
+      console.error("Type and content are required to show a message.");
+      return;
+    }
 
-      setTimeout(() => {
-        setMessages((prev) => prev.filter((msg) => msg.id !== id));
-      }, 3000);
+    const id = Date.now();
+
+    const newMessage = {
+      id,
+      type,
+      content,
     };
-  
-    const hideMessage = (id) => {
+
+    setMessages((prev) => [...prev, newMessage]);
+
+    setTimeout(() => {
       setMessages((prev) => prev.filter((msg) => msg.id !== id));
-    };
+    }, 3000);
+  };
+
+  const hideMessage = (id) => {
+    setMessages((prev) => prev.filter((msg) => msg.id !== id));
+  };
+
+  const addMessage = (message) => {
+    setMessages((prev) => [...prev, message]);
+  };
 
   return (
-    <MessageContext.Provider value={{ messages, showMessage, hideMessage }}>
+    <MessageContext.Provider value={{ 
+      messages, 
+      showMessage, 
+      chatID,
+      setChatID,
+      hideMessage,
+      connectionStatus,
+      addMessage,
+    }}>
       {children}
     </MessageContext.Provider>
   );

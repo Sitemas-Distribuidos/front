@@ -30,11 +30,13 @@ export const Container = styled.main`
         flex-direction: column;
         gap: 12px;
         justify-content: center;
-        width: 100%;
+        width: 60%;
 
         div {
             display: flex;
             flex-direction: column;
+            width: 100%;
+
             label {
                 color: ${colors.primary};
                 font-size: 14px;

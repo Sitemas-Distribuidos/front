@@ -10,21 +10,21 @@ import { trash, edit } from "../../assets/icons";
 /* 🎨 STYLES */
 import { Container, ButtonIcon } from "./styles";
 
-const Dropdown = ({ chatId, onClose }) => {
+const Dropdown = ({ onClick, onClose }) => {
 
     const { showMessage } = useContext(MessageContext);
 
     const handleRemove = () => {
-        console.log(`Removing chat with ID: ${chatId}`);
+        onClick();
         onClose(); 
         showMessage('success', 'Chat removed successfully!');
     }
 
-    const handleEdit = () => {
-        console.log(`Editing chat with ID: ${chatId}`);
-        onClose();
-        showMessage('warning', 'No chat selected for editing!');
-    }
+    // const handleEdit = () => {
+    //     console.log(`Editing chat with ID: ${chatId}`);
+    //     onClose();
+    //     showMessage('warning', 'No chat selected for editing!');
+    // }
 
     return (
         <Container>
@@ -32,10 +32,10 @@ const Dropdown = ({ chatId, onClose }) => {
                 <ButtonIcon src={trash} alt="Remove Icon"/>
                 Remover
             </button>
-            <button onClick={() => handleEdit()}>
+            {/* <button onClick={() => handleEdit()}>
                 <ButtonIcon src={edit} alt="Remove Icon"/>
                 Editar
-            </button>
+            </button> */}
         </Container>
     )
 }
