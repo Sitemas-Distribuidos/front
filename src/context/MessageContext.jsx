@@ -66,7 +66,6 @@ const MessageProvider = ({ children }) => {
       showMessage, 
       chatID,
       setChatID,
-      showMessage,
       hideMessage,
       connectionStatus,
       addMessage,
