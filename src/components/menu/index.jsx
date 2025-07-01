@@ -18,6 +18,8 @@ import { Sidebar, CloseIcon, LogoutIcon, ChatIcon, SearchIcon, AddPersonIcon, Ad
 
 /* 🔗 SERVICE */
 import { useSocket } from '../../hooks/useSocket';
+import { useGetChatID } from "../../services/chat/GetChatID";
+import { MessageContext } from "../../context/MessageContext";
 
 const contatos = [
   {
@@ -95,6 +97,10 @@ const Menu = ({ onClose }) => {
     const [openDropdown, setOpenDropdown] = useState(null);
     const [contacts, setContacts] = useState([]);
     const [searchChat, setSearchChat] = useState('');
+    const [groupName, setGroupName] = useState(null);
+    const getchatID = useGetChatID("nayrNoel", groupName);
+
+    const { setChatID } = useContext(MessageContext);
 
     useEffect(() => {
         setContacts(contatos);
@@ -133,6 +139,17 @@ const Menu = ({ onClose }) => {
     // const filteredContact = contacts?.filter((contact) =>
     //     contact?.username.toLowerCase().includes(searchChat.toLowerCase())
     // );
+    
+    useEffect(() => {
+      if (getchatID) {
+        console.log("Chat ID", getchatID);
+        setChatID(getchatID);
+      }
+    }, [getchatID]);
+
+    const handleOpenChat = (username) => {
+      setGroupName(username)
+    }
 
     const handleToggle = (index) => {
       setOpenDropdown((prev) => (prev === index ? null : index));
@@ -163,7 +180,7 @@ const Menu = ({ onClose }) => {
                       <li key={index}>
                           <ChatIcon src={contact.type === "group" ?  group : person}/>
                           <div className="contact-info">
-                            <span>{contact.username}</span>
+                            <span onClick={() => handleOpenChat(contact.username)}>{contact.username}</span>
                             <div ref={openDropdown === index ? dropdownRef : null}>
                               <MoreIcon src={more} title="More options" onClick={() => handleToggle(index)}/>
                               {openDropdown === index && (

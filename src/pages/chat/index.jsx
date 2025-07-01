@@ -1,5 +1,5 @@
 /* ⚛ REACT */
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 
 /* 📦 LIBS */
 import { useMediaQuery } from "@react-hook/media-query";
@@ -16,6 +16,9 @@ import { send, clip, menu, group } from "../../assets/icons";
 /* 🎨 STYLES */
 import { Container, SendIcon, ClipIcon, MenuIcon, ChatIcon } from "./styles";
 
+import { usePostMessage } from "../../services/chat/PostMessage";
+
+import { MessageContext } from "../../context/MessageContext";
 const mensagens = [
 
 ];
@@ -27,15 +30,31 @@ const Chat = () => {
     const isSmallScreen = useMediaQuery('(max-width: 720px)');
 
     const { sendMessage, socketData } = useSocket();
+    const { chatID, messages } = useContext(MessageContext);
+    let user_id = localStorage.getItem("user_id");
 
     const messageInputRef = useRef(null);
     const fileInputRef = useRef(null);
 
-    const [messages, setMessages] = useState([]);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [chatName, setChatName] = useState('');
 
     const handleSubmit = () => {
-        console.log(fileInputRef.current.value);
+      const files = fileInputRef.current.files;
+      const messageText = messageInputRef.current.value;
+
+      console.log("CHAT ID: ",chatID);
+      console.log("User id: ",user_id);
+
+      const message = {
+        channel: "messages",
+        method: "POST",
+        chatId: chatID,
+        senderId: user_id,
+        content: messageText,
+      };
+
+      sendMessage(JSON.stringify(message));
     }
 
     const handleOpenMenu = () => {
@@ -49,7 +68,7 @@ const Chat = () => {
     // };
 
     useEffect(() => {
-      setMessages(mensagens);
+      // setMessages(mensagens);
     }, [])
 
     return(
@@ -61,15 +80,25 @@ const Chat = () => {
                   {!isMenuOpen && <MenuIcon src={menu} onClick={() => handleOpenMenu()} title="Open menu"/>}
                   <div className="chat-name">
                     <ChatIcon src={group} />
-                    <h2>Maior nome possível já existente na face da Terra</h2>
+                    <h2>{chatName}</h2>
                   </div>
                 </div>
                 <div className="chat">
-                    {messages.map((message, index) => (
-                        <div className={`message-container ${message.is_mine && 'message-mine'}`} key={index}>
-                            <div className="message-author"><strong>{message.author}</strong></div>
-                            <div className="message-text">{message.text}</div>
-                            <span>{message.hour}</span>
+                    {Array.isArray(messages) && messages.map((message, index) => (
+                        <div 
+                            className={`message-container ${
+                              message.SenderID === user_id ? 'sent' : 'received'
+                            }`}
+                            key={index}
+                          >
+                            <div className="message-author"><strong>{message.SenderID}</strong></div>
+                            <div className="message-text">{message.Content}</div>
+                            <span className="message-time">
+                              {new Date(message.Created_at).toLocaleTimeString([], {
+                                hour: '2-digit',
+                                minute: '2-digit',
+                              })}
+                            </span>
                         </div>
                     ))}
                 </div>
