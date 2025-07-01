@@ -74,7 +74,7 @@ export const Sidebar = styled.div`
                 padding: 10px;
                 width: 100%;    
 
-                .contact-info {
+                .chat-info {
                     align-items: center;
                     box-sizing: border-box;
                     display: flex;
