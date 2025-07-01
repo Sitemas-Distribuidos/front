@@ -22,7 +22,7 @@ const Message = () => {
     return(
         <Container>
         {messages.map((message) => (
-            <li key={message.ID} type={message.type}>
+            <li key={message.id} type={message.type}>
                 <MessageIcon src={iconMap[message.type]} alt={message.type} />
                 <span>{message.content}</span>
             </li>
