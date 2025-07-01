@@ -24,7 +24,7 @@ const mensagens = [
 ];
 
 const Chat = () => {
-  const { chatID, messages } = useContext(MessageContext);
+  const { chatID, messages, addMessage } = useContext(MessageContext);
   
   const chatInfo = useChatInfo(chatID);
 
@@ -34,6 +34,7 @@ const Chat = () => {
 
   const { sendMessage, socketData } = useSocket();
   let user_id = localStorage.getItem("user_id");
+  let user_name = localStorage.getItem("user_name");
 
   const messageInputRef = useRef(null);
   const fileInputRef = useRef(null);
@@ -41,20 +42,41 @@ const Chat = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [chatName, setChatName] = useState('');
   const [recipientId, setRecipientId] = useState(null);
+  const [messageText, setMessageText] = useState('');
+  const messagesEndRef = useRef(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   const handleSubmit = () => {
-    const files = fileInputRef.current.files;
-    const messageText = messageInputRef.current.value;
+    const trimmedMessage = messageText.trim();
+    if (!trimmedMessage) return;
+
+    const newMessage = {
+      ID: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      SenderID: user_id,
+      Content: trimmedMessage,
+      Created_at: new Date().toISOString(),
+    };
+
+    // Adiciona imediatamente no chat 
+    addMessage(newMessage);
 
     const message = {
       channel: "messages",
       method: "POST",
       chatId: chatID,
       senderId: user_id,
-      content: messageText,
+      content: trimmedMessage,
     };
 
     sendMessage(JSON.stringify(message));
+    setMessageText('');
   }
 
   const handleOpenMenu = () => {
@@ -69,35 +91,21 @@ const Chat = () => {
 
   useEffect(() => {
     if (chatInfo) {
-      console.log("Chat info recebida:", chatInfo);
       if (chatInfo.type === "private"){
         const [usernameA, usernameB] = chatInfo.members;
-        const otherUsername = user_id ? usernameB : usernameA;
+        const chatName = (user_name == usernameA)? usernameB : usernameA;
 
-        setChatName(otherUsername);
-
-        sendMessage(JSON.stringify({
-          channel: "user",
-          method: "GET",
-          username: otherUsername,
-        }));
+        setChatName(chatName);
       } else {
         setChatName(chatInfo.name)
       }
     }
   }, [chatInfo]);
 
-  useEffect(() => {
-  if (socketData?.message === "Username founded") {
-      setRecipientId(socketData._id);
-      if (user_id === socketData._id){
-        setChatName(chatInfo.members[1]);
-      }
-      // console.log("Recipient ID recebido:", socketData._id);
-      // console.log("User id: ",user_id);
-
-    }
-  }, [socketData]);
+  // useEffect(() => {
+  // if (socketData?.message === "Username founded") {
+  //   }
+  // }, [socketData]);
 
     return(
         <Container>
@@ -115,7 +123,7 @@ const Chat = () => {
                     {Array.isArray(messages) && messages.map((message, index) => (
                         <div 
                             className={`message-container ${
-                              message.SenderID === user_id ? 'sent' : 'received'
+                              message.SenderID === user_id ? 'message-mine' : 'received'
                             }`}
                             key={index}
                           >
@@ -129,6 +137,7 @@ const Chat = () => {
                             </span>
                         </div>
                     ))}
+                    <div ref={messagesEndRef} /> 
                 </div>
                 <div className="input-container">
                     <div>
@@ -136,7 +145,17 @@ const Chat = () => {
                         <ClipIcon src={clip} title="Select a file"/>
                         <input className="hidden-input" type="file" accept="image/*" ref={fileInputRef} />
                       </label>
-                      <input type="text" placeholder="Message" ref={messageInputRef}/>
+                      <input 
+                          type="text" 
+                          placeholder="Message" 
+                          value={messageText}
+                          onChange={(e) => setMessageText(e.target.value)} 
+                          onKeyDown={(e) => {
+                          if (e.key === 'Enter' && !e.shiftKey) {
+                            e.preventDefault();
+                            handleSubmit();
+                          }
+                        }}/>
                     </div>
                     <button onClick={() => handleSubmit()}>
                         <SendIcon src={send} title="Send message"/>

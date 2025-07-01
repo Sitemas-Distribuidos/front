@@ -91,6 +91,7 @@ const Menu = ({ onClose }) => {
     // const searchInputRef = useRef(null);
 
     let user_id = localStorage.getItem("user_id");
+    let user_name = localStorage.getItem("user_name");
 
     const dropdownRef = useRef(null);
 
@@ -98,7 +99,9 @@ const Menu = ({ onClose }) => {
     const [contacts, setContacts] = useState([]);
     const [searchChat, setSearchChat] = useState('');
     const [groupName, setGroupName] = useState(null);
-    const getchatID = useGetChatID("nayrNoel", groupName);
+    const [shouldFetchChatID, setShouldFetchChatID] = useState(false);
+
+    const getchatID = useGetChatID(user_name, groupName, shouldFetchChatID);
 
     const { setChatID } = useContext(MessageContext);
 
@@ -125,15 +128,14 @@ const Menu = ({ onClose }) => {
     }, []);
 
     useEffect(() => {
-        if (socketData) {
-          console.log(socketData)
-           const usuariosFormatados = socketData.contacts?.map(user => ({ // alterar nome 
-            id: user._id,
-            username: user.username,
-          }));
+      if (socketData?.contacts && Array.isArray(socketData.contacts)) {
+        const usuariosFormatados = socketData.contacts.map(user => ({
+          id: user._id,
+          username: user.username,
+        }));
 
-          setContacts(usuariosFormatados);
-        }
+        setContacts(usuariosFormatados);
+      }
     }, [socketData]);
 
     // const filteredContact = contacts?.filter((contact) =>
@@ -142,13 +144,14 @@ const Menu = ({ onClose }) => {
     
     useEffect(() => {
       if (getchatID) {
-        console.log("Chat ID", getchatID);
+        // console.log("Chat ID", getchatID);
         setChatID(getchatID);
       }
     }, [getchatID]);
 
     const handleOpenChat = (username) => {
       setGroupName(username)
+      setShouldFetchChatID(true);
     }
 
     const handleToggle = (index) => {

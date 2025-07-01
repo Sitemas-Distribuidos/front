@@ -53,8 +53,9 @@ const Join = () => {
     const handleLogin = (response) => {
         if (response?.message.toLowerCase() === "username founded") {
             localStorage.setItem('user_id', response._id);
+            localStorage.setItem('user_name', usernameRef.current.value);
             navigate("/");
-            showMessage('success', 'Successfully login!'); 
+            showMessage('success', 'Successfully login!');
         }
     }
 

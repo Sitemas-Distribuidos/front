@@ -21,13 +21,13 @@ const MessageProvider = ({ children }) => {
   }, [chatID, connectionStatus, sendMessage]);
 
   useEffect(() => {
-      if (socketData?.type === "messageList" && Array.isArray(socketData.msg)) {
-        setMessages(socketData.msg);
-        console.log("MESSAGES: ",socketData.msg)
-      }
-      if (socketData?.msg == null){
-        setMessages([]);
-      }
+    if (socketData?.type === "messageList" && Array.isArray(socketData.msg)) {
+      setMessages(socketData.msg);
+      console.log("MESSAGES: ",socketData.msg)
+    }
+    if (socketData?.msg == null && socketData?.type === "messageList"){
+      setMessages([]);
+    }
   }, [socketData]);
 
   const showMessage = (type, content = null) => {
@@ -56,6 +56,10 @@ const MessageProvider = ({ children }) => {
     setMessages((prev) => prev.filter((msg) => msg.id !== id));
   };
 
+  const addMessage = (message) => {
+    setMessages((prev) => [...prev, message]);
+  };
+
   return (
     <MessageContext.Provider value={{ 
       messages, 
@@ -65,6 +69,7 @@ const MessageProvider = ({ children }) => {
       showMessage,
       hideMessage,
       connectionStatus,
+      addMessage,
     }}>
       {children}
     </MessageContext.Provider>
