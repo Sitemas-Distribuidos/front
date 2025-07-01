@@ -115,7 +115,7 @@ const Chat = () => {
                 <div className="chat-header">
                   {!isMenuOpen && <MenuIcon src={menu} onClick={() => handleOpenMenu()} title="Open menu"/>}
                   <div className="chat-name">
-                    <ChatIcon src={group} />
+                    {chatName && <ChatIcon src={group} />}
                     <h2>{chatName}</h2>
                   </div>
                 </div>
