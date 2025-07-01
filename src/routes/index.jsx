@@ -7,7 +7,7 @@ import Register from "../pages/register";
 import Chat from "../pages/chat";
 
 /* 🧭 ROUTES */
-import PrivateRoute from "./PrivateRoute";
+import PrivateRoute from './privateRoute'
 
 export const router = createBrowserRouter([
   {
@@ -20,11 +20,10 @@ export const router = createBrowserRouter([
   },
   {
     path: "/",
-    element: <Chat />,
-    // element: (
-    //   <PrivateRoute>
-    //     <Chat />
-    //   </PrivateRoute>
-    // ),
+    element: (
+      <PrivateRoute>
+        <Chat />
+      </PrivateRoute>
+    ),
   }
 ]);

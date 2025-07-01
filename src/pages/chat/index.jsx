@@ -1,11 +1,14 @@
 /* ⚛ REACT */
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 
 /* 📦 LIBS */
-import { useMediaQuery } from '@react-hook/media-query'
+import { useMediaQuery } from "@react-hook/media-query";
 
 /* 🧩 COMPONENTS */
 import Menu from "../../components/menu";
+
+/* 🔗 SERVICE */
+import { useSocket } from '../../hooks/useSocket';
 
 /* 📁 ASSETS*/
 import { send, clip, menu, group } from "../../assets/icons";
@@ -13,92 +16,96 @@ import { send, clip, menu, group } from "../../assets/icons";
 /* 🎨 STYLES */
 import { Container, SendIcon, ClipIcon, MenuIcon, ChatIcon } from "./styles";
 
+import { useChatInfo } from "../../hooks/useChatInfo";
+
+import { MessageContext } from "../../context/MessageContext";
 const mensagens = [
-  {
-    author: "João",
-    text: "E aí, tudo certo?",
-    hour: "5pm",
-    is_mine: true
-  },
-  {
-    author: "Dionys",
-    text: "Tudo sim! E contigo?",
-    hour: "5pm",
-    is_mine: false
-  },
-  {
-    author: "Knosh",
-    text: "Bora marcar aquele rolê no finde?",
-    hour: "5pm",
-    is_mine: false
-  },
-  {
-    author: "Thiago",
-    text: "Tô dentro! Que horas?",
-    hour: "5pm",
-    is_mine: false
-  },
-  {
-    author: "João",
-    text: "Às 17h fica bom para todos?",
-    hour: "5pm",
-    is_mine: true
-  },
-  {
-    author: "Mikamel",
-    text: "Onde vai ser?",
-    hour: "5pm",
-    is_mine: false
-  },
-  {
-    author: "Vinizaum",
-    text: "Vai ser na casa do Ryan",
-    hour: "5pm",
-    is_mine: false
-  },
-  {
-    author: "C.E.O.",
-    text: "Não esqueçam de levar as bebidas!",
-    hour: "5pm",
-    is_mine: false
-  },
-  {
-    author: "Ryan",
-    text: "Claro, vou levar cerveja!",
-    hour: "5pm",
-    is_mine: false
-  },
+
 ];
 
 const Chat = () => {
+  const { chatID, messages, addMessage } = useContext(MessageContext);
+  
+  const chatInfo = useChatInfo(chatID);
 
-    document.title = "Chat";
+  document.title = "Chat";
 
-    const isSmallScreen = useMediaQuery('(max-width: 720px)');
+  const isSmallScreen = useMediaQuery('(max-width: 720px)');
 
-    const messageInputRef = useRef(null);
-    const fileInputRef = useRef(null);
+  const { sendMessage, socketData } = useSocket();
+  let user_id = localStorage.getItem("user_id");
+  let user_name = localStorage.getItem("user_name");
 
-    const [messages, setMessages] = useState([]);
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const messageInputRef = useRef(null);
+  const fileInputRef = useRef(null);
 
-    const handleSubmit = () => {
-        console.log(fileInputRef.current.value);
-    }
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [chatName, setChatName] = useState('');
+  const [recipientId, setRecipientId] = useState(null);
+  const [messageText, setMessageText] = useState('');
+  const messagesEndRef = useRef(null);
 
-    const handleOpenMenu = () => {
-      setIsMenuOpen(true);
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  const handleSubmit = () => {
+    const trimmedMessage = messageText.trim();
+    if (!trimmedMessage) return;
+
+    const newMessage = {
+      ID: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      SenderID: user_id,
+      Content: trimmedMessage,
+      Created_at: new Date().toISOString(),
     };
 
-    // const handleFileChange = (event) => {
-    // // Get the first file from the selected files list
-    //   const file = event.target.files[0];
-    //   setSelectedFile(file); // Update state with the selected file
-    // };
+    // Adiciona imediatamente no chat 
+    addMessage(newMessage);
 
-    useEffect(() => {
-      setMessages(mensagens);
-    }, [])
+    const message = {
+      channel: "messages",
+      method: "POST",
+      chatId: chatID,
+      senderId: user_id,
+      content: trimmedMessage,
+    };
+
+    sendMessage(JSON.stringify(message));
+    setMessageText('');
+  }
+
+  const handleOpenMenu = () => {
+    setIsMenuOpen(true);
+  };
+
+  // const handleFileChange = (event) => {
+  // // Get the first file from the selected files list
+  //   const file = event.target.files[0];
+  //   setSelectedFile(file); // Update state with the selected file
+  // };
+
+  useEffect(() => {
+    if (chatInfo) {
+      if (chatInfo.type === "private"){
+        const [usernameA, usernameB] = chatInfo.members;
+        const chatName = (user_name == usernameA)? usernameB : usernameA;
+
+        setChatName(chatName);
+      } else {
+        setChatName(chatInfo.name)
+      }
+    }
+  }, [chatInfo]);
+
+  // useEffect(() => {
+  // if (socketData?.message === "Username founded") {
+  //   }
+  // }, [socketData]);
 
     return(
         <Container>
@@ -108,18 +115,29 @@ const Chat = () => {
                 <div className="chat-header">
                   {!isMenuOpen && <MenuIcon src={menu} onClick={() => handleOpenMenu()} title="Open menu"/>}
                   <div className="chat-name">
-                    <ChatIcon src={group} />
-                    <h2>Maior nome possível já existente na face da Terra</h2>
+                    {chatName && <ChatIcon src={group} />}
+                    <h2>{chatName}</h2>
                   </div>
                 </div>
                 <div className="chat">
-                    {messages.map((message, index) => (
-                        <div className={`message-container ${message.is_mine && 'message-mine'}`} key={index}>
-                            <div className="message-author"><strong>{message.author}</strong></div>
-                            <div className="message-text">{message.text}</div>
-                            <span>{message.hour}</span>
+                    {Array.isArray(messages) && messages.map((message, index) => (
+                        <div 
+                            className={`message-container ${
+                              message.SenderID === user_id ? 'message-mine' : 'received'
+                            }`}
+                            key={index}
+                          >
+                            <div className="message-author"><strong>{message.SenderID}</strong></div>
+                            <div className="message-text">{message.Content}</div>
+                            <span className="message-time">
+                              {new Date(message.Created_at).toLocaleTimeString([], {
+                                hour: '2-digit',
+                                minute: '2-digit',
+                              })}
+                            </span>
                         </div>
                     ))}
+                    <div ref={messagesEndRef} /> 
                 </div>
                 <div className="input-container">
                     <div>
@@ -127,7 +145,17 @@ const Chat = () => {
                         <ClipIcon src={clip} title="Select a file"/>
                         <input className="hidden-input" type="file" accept="image/*" ref={fileInputRef} />
                       </label>
-                      <input type="text" placeholder="Message" ref={messageInputRef}/>
+                      <input 
+                          type="text" 
+                          placeholder="Message" 
+                          value={messageText}
+                          onChange={(e) => setMessageText(e.target.value)} 
+                          onKeyDown={(e) => {
+                          if (e.key === 'Enter' && !e.shiftKey) {
+                            e.preventDefault();
+                            handleSubmit();
+                          }
+                        }}/>
                     </div>
                     <button onClick={() => handleSubmit()}>
                         <SendIcon src={send} title="Send message"/>
