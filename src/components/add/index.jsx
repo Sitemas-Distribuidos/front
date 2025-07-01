@@ -30,28 +30,32 @@ const Add = () => {
     let user_id = localStorage.getItem("user_id");
 
     useEffect(() => {
-        sendMessage(JSON.stringify({
-            channel: "user",
-            method: "GET-all",
-        }));
+        handleGetAllUsers();
     }, []);
 
     useEffect(() => {
         if (socketData) {
-           const usuariosFormatados = socketData.users?.map(user => ({ // alterar nome 
+           const formattedUsers = socketData.users?.map(user => ({
             id: user.ID,
             name: user.Name,
             username: user.Username,
             email: user.Email,
           }));
 
-          setContacts(usuariosFormatados);
+          setContacts(formattedUsers);
         }
     }, [socketData]);
 
     const filteredUsers = contacts?.filter((contact) =>
-        contact.username.toLowerCase().includes(searchUser.toLowerCase())
+        contact?.username?.toLowerCase().includes(searchUser.toLowerCase())
     );
+
+    const handleGetAllUsers = () => {
+        sendMessage(JSON.stringify({
+            channel: "user",
+            method: "GET-all",
+        }));
+    }
 
     const handleChange = (index) => {
       setIsPlusIcon(!isPlusIcon);
@@ -64,16 +68,18 @@ const Add = () => {
 
     const handleSubmit = () => {
       setIsLoading(true);
+      if (selected.length > 0) {
         sendMessage(JSON.stringify({
-            channel: "user",
-            method: "PATCH",
-            _id: user_id,
-            newContact_id: selected[0],
+          channel: "user",
+          method: "PATCH",
+          _id: user_id,
+          newContact_id: selected[0],
         }));
-      setTimeout(() => {
-        closeModal();
-      }, 5000);
-      showMessage('warning', 'Contact added successfully!');
+        showMessage('success', 'Contact added successfully!');
+      } else {
+        showMessage('error', 'No contacts were added');
+      }
+      closeModal();
       setIsLoading(false);
     }
 
@@ -86,8 +92,8 @@ const Add = () => {
             </div>
             <ul>
                 <h3>Users List</h3>
-                {filteredUsers.map((contact, index) => (
-                    <li key={index}>
+                {filteredUsers?.map(contact => (
+                    <li key={contact.id}>
                         <PersonIcon src={person} />
                         <div className="contact-info">
                             <span>{contact.username}</span>
