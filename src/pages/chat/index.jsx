@@ -16,7 +16,7 @@ import { send, clip, menu, group } from "../../assets/icons";
 /* 🎨 STYLES */
 import { Container, SendIcon, ClipIcon, MenuIcon, ChatIcon } from "./styles";
 
-import { usePostMessage } from "../../services/chat/PostMessage";
+import { useChatInfo } from "../../hooks/useChatInfo";
 
 import { MessageContext } from "../../context/MessageContext";
 const mensagens = [
@@ -24,52 +24,80 @@ const mensagens = [
 ];
 
 const Chat = () => {
+  const { chatID, messages } = useContext(MessageContext);
+  
+  const chatInfo = useChatInfo(chatID);
 
-    document.title = "Chat";
+  document.title = "Chat";
 
-    const isSmallScreen = useMediaQuery('(max-width: 720px)');
+  const isSmallScreen = useMediaQuery('(max-width: 720px)');
 
-    const { sendMessage, socketData } = useSocket();
-    const { chatID, messages } = useContext(MessageContext);
-    let user_id = localStorage.getItem("user_id");
+  const { sendMessage, socketData } = useSocket();
+  let user_id = localStorage.getItem("user_id");
 
-    const messageInputRef = useRef(null);
-    const fileInputRef = useRef(null);
+  const messageInputRef = useRef(null);
+  const fileInputRef = useRef(null);
 
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [chatName, setChatName] = useState('');
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [chatName, setChatName] = useState('');
+  const [recipientId, setRecipientId] = useState(null);
 
-    const handleSubmit = () => {
-      const files = fileInputRef.current.files;
-      const messageText = messageInputRef.current.value;
+  const handleSubmit = () => {
+    const files = fileInputRef.current.files;
+    const messageText = messageInputRef.current.value;
 
-      console.log("CHAT ID: ",chatID);
-      console.log("User id: ",user_id);
-
-      const message = {
-        channel: "messages",
-        method: "POST",
-        chatId: chatID,
-        senderId: user_id,
-        content: messageText,
-      };
-
-      sendMessage(JSON.stringify(message));
-    }
-
-    const handleOpenMenu = () => {
-      setIsMenuOpen(true);
+    const message = {
+      channel: "messages",
+      method: "POST",
+      chatId: chatID,
+      senderId: user_id,
+      content: messageText,
     };
 
-    // const handleFileChange = (event) => {
-    // // Get the first file from the selected files list
-    //   const file = event.target.files[0];
-    //   setSelectedFile(file); // Update state with the selected file
-    // };
+    sendMessage(JSON.stringify(message));
+  }
 
-    useEffect(() => {
-      // setMessages(mensagens);
-    }, [])
+  const handleOpenMenu = () => {
+    setIsMenuOpen(true);
+  };
+
+  // const handleFileChange = (event) => {
+  // // Get the first file from the selected files list
+  //   const file = event.target.files[0];
+  //   setSelectedFile(file); // Update state with the selected file
+  // };
+
+  useEffect(() => {
+    if (chatInfo) {
+      console.log("Chat info recebida:", chatInfo);
+      if (chatInfo.type === "private"){
+        const [usernameA, usernameB] = chatInfo.members;
+        const otherUsername = user_id ? usernameB : usernameA;
+
+        setChatName(otherUsername);
+
+        sendMessage(JSON.stringify({
+          channel: "user",
+          method: "GET",
+          username: otherUsername,
+        }));
+      } else {
+        setChatName(chatInfo.name)
+      }
+    }
+  }, [chatInfo]);
+
+  useEffect(() => {
+  if (socketData?.message === "Username founded") {
+      setRecipientId(socketData._id);
+      if (user_id === socketData._id){
+        setChatName(chatInfo.members[1]);
+      }
+      // console.log("Recipient ID recebido:", socketData._id);
+      // console.log("User id: ",user_id);
+
+    }
+  }, [socketData]);
 
     return(
         <Container>
