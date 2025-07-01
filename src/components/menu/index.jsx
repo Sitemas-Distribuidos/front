@@ -21,65 +21,6 @@ import { useSocket } from '../../hooks/useSocket';
 import { useGetChatID } from "../../services/chat/GetChatID";
 import { MessageContext } from "../../context/MessageContext";
 
-const contatos = [
-  {
-    chat_name: "Grupo 1",
-    type: "group"
-  },
-  {
-    chat_name: "Alicia",
-    type: "person"
-  },
-  {
-    chat_name: "Grupo 2",
-    type: "group"
-  },
-  {
-    chat_name: "Ryan",
-    type: "person"
-  },
-  {
-    chat_name: "Knosh",
-    type: "person"
-  },
-  {
-    chat_name: "Vinizaum",
-    type: "person"
-  },
-  {
-    chat_name: "Ricando",
-    type: "person"
-  },
-  {
-    chat_name: "Mikamel",
-    type: "person"
-  },
-  {
-    chat_name: "CEO",
-    type: "person"
-  },
-  {
-    chat_name: "Dev Team",
-    type: "group"
-  },
-  {
-    chat_name: "Marketing Teameeeeeeeeeeeeeeeeeeeee",
-    type: "group"
-  },
-  {
-    chat_name: "Fulano",
-    type: "person"
-  },
-  {
-    chat_name: "Ciclano",
-    type: "person"
-  },
-  {
-    chat_name: "Beltrano",
-    type: "person"
-  },
-];
-
 const Menu = ({ onClose }) => {
 
     let navigate = useNavigate();
@@ -96,7 +37,7 @@ const Menu = ({ onClose }) => {
     const dropdownRef = useRef(null);
 
     const [openDropdown, setOpenDropdown] = useState(null);
-    const [contacts, setContacts] = useState([]);
+    const [chats, setChats] = useState([]);
     const [searchChat, setSearchChat] = useState('');
     const [groupName, setGroupName] = useState(null);
     const [shouldFetchChatID, setShouldFetchChatID] = useState(false);
@@ -106,7 +47,6 @@ const Menu = ({ onClose }) => {
     const { setChatID } = useContext(MessageContext);
 
     useEffect(() => {
-        setContacts(contatos);
 
         const handleClickOutside = (event) => {
           if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -114,11 +54,7 @@ const Menu = ({ onClose }) => {
           }
         };
 
-        sendMessage(JSON.stringify({
-            channel: "user",
-            method: "GET-contacts",
-            _id: user_id,
-        }));
+        handleGetContacts();
 
         document.addEventListener('mousedown', handleClickOutside);
 
@@ -129,18 +65,19 @@ const Menu = ({ onClose }) => {
 
     useEffect(() => {
       if (socketData?.contacts && Array.isArray(socketData.contacts)) {
-        const usuariosFormatados = socketData.contacts.map(user => ({
+        const formattedUsers = socketData.contacts.map(user => ({
           id: user._id,
           username: user.username,
         }));
-
-        setContacts(usuariosFormatados);
+        setChats(formattedUsers);
+      } else {
+        setChats([]);
       }
     }, [socketData]);
 
-    // const filteredContact = contacts?.filter((contact) =>
-    //     contact?.username.toLowerCase().includes(searchChat.toLowerCase())
-    // );
+    const filteredChat = chats?.filter((chat) =>
+        chat?.username?.toLowerCase().includes(searchChat.toLowerCase())
+    );
     
     useEffect(() => {
       if (getchatID) {
@@ -148,6 +85,14 @@ const Menu = ({ onClose }) => {
         setChatID(getchatID);
       }
     }, [getchatID]);
+
+    const handleGetContacts = () => {
+        sendMessage(JSON.stringify({
+            channel: "user",
+            method: "GET-contacts",
+            _id: user_id,
+        }));
+    }
 
     const handleOpenChat = (username) => {
       setGroupName(username)
@@ -157,6 +102,16 @@ const Menu = ({ onClose }) => {
     const handleToggle = (index) => {
       setOpenDropdown((prev) => (prev === index ? null : index));
     };
+
+    const handleRemoveChat = (chatId) => {
+      sendMessage(JSON.stringify({
+        channel: "user",
+        method: "DELETE-contact",
+        _id: user_id,
+        contact_id: chatId,
+      }));
+      handleGetContacts();
+    }
 
     const handleLogout = () => {
       localStorage.removeItem('user_id');
@@ -179,22 +134,21 @@ const Menu = ({ onClose }) => {
                   <input type="text" onChange={e => setSearchChat(e.target.value)} placeholder="Search"/>
               </div>
               <ul>
-                  {contacts.map((contact, index) => (
+                  {filteredChat.length > 0 &&
+                    filteredChat?.map((chat, index) => (
                       <li key={index}>
-                          <ChatIcon src={contact.type === "group" ?  group : person}/>
-                          <div className="contact-info">
-                            <span onClick={() => handleOpenChat(contact.username)}>{contact.username}</span>
+                          <ChatIcon src={chat.type === "group" ?  group : person}/>
+                          <div className="chat-info">
+                            <span onClick={() => handleOpenChat(chat.username)}>{chat.username}</span>
                             <div ref={openDropdown === index ? dropdownRef : null}>
                               <MoreIcon src={more} title="More options" onClick={() => handleToggle(index)}/>
                               {openDropdown === index && (
-                                <Dropdown onClose={() => setOpenDropdown(null)} />
+                                <Dropdown onClose={() => setOpenDropdown(null)} onClick={() => handleRemoveChat(chat.id)}/>
                               )}
                             </div>
-
                           </div>
                       </li>
-                  ))
-                  }
+                  ))}
               </ul>
             </div>
         </Sidebar>
