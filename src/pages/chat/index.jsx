@@ -19,64 +19,120 @@ import { Container, SendIcon, ClipIcon, MenuIcon, ChatIcon } from "./styles";
 import { useChatInfo } from "../../hooks/useChatInfo";
 
 import { MessageContext } from "../../context/MessageContext";
-const mensagens = [
-
-];
 
 const Chat = () => {
-  const { chatID, messages, addMessage } = useContext(MessageContext);
+  // const { messages } = useContext(MessageContext);
   
-  const chatInfo = useChatInfo(chatID);
+  // const chatInfo = useChatInfo(chatID);
 
   document.title = "Chat";
 
   const isSmallScreen = useMediaQuery('(max-width: 720px)');
 
   const { sendMessage, socketData } = useSocket();
-  let user_id = localStorage.getItem("user_id");
-  let user_name = localStorage.getItem("user_name");
+  let user = JSON.parse(localStorage.getItem("user"));
 
   const messageInputRef = useRef(null);
   const fileInputRef = useRef(null);
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [chatName, setChatName] = useState('');
+  // const [chatName, setChatName] = useState('');
   const [recipientId, setRecipientId] = useState(null);
-  const [messageText, setMessageText] = useState('');
+  const [chatMessages, setChatMessages] = useState([]);
+  // const [messageText, setMessageText] = useState('');
   const messagesEndRef = useRef(null);
+
+  const [chat, setChat] = useState({
+    id: '',
+    name: '',
+  });
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  // useEffect(() => {
+  //     console.log('aquiiiiiiiii:', chatId)
+  // }, [chatId])
+
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [chatMessages]);
 
   const handleSubmit = () => {
-    const trimmedMessage = messageText.trim();
+    const trimmedMessage = messageInputRef.current.value.trim();
     if (!trimmedMessage) return;
 
+    handleSendMessage(trimmedMessage);
+    
     const newMessage = {
       ID: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-      SenderID: user_id,
+      SenderID: user.id,
       Content: trimmedMessage,
       Created_at: new Date().toISOString(),
     };
 
-    // Adiciona imediatamente no chat 
-    addMessage(newMessage);
+    setChatMessages((prev) => [...prev, newMessage]);
 
-    const message = {
+    messageInputRef.current.value = '';
+
+    // // Adiciona imediatamente no chat 
+    // addMessage(newMessage);
+
+    // const addMessage = (message) => {
+    //   setChatMessages((prev) => [...prev, message]);
+    // };
+
+
+    // const message = {
+    //   channel: "messages",
+    //   method: "POST",
+    //   chatId: chatID,
+    //   senderId: user_id,
+    //   content: trimmedMessage,
+    // };
+
+
+    // // sendMessage(JSON.stringify(message));
+    // setMessageText('');
+  }
+
+  const handleSendMessage = (message) => {
+    if (chat.id) {
+      sendMessage(JSON.stringify({
       channel: "messages",
       method: "POST",
-      chatId: chatID,
-      senderId: user_id,
-      content: trimmedMessage,
-    };
+      chatId: chat.id,
+      senderId: user.id,
+      content: message,
+    }));
+    }
+  }
 
-    sendMessage(JSON.stringify(message));
-    setMessageText('');
+  // Pega as informações do chat
+  const handleGetChatInfo = (chatId) => {
+    sendMessage(JSON.stringify({
+      channel: "chat",
+      method: "GET-info",
+      chatId: chatId,
+    }));
+  }
+
+  // Abre uma conversa ja existente
+    const handleOpenChat = (chatId, chatName) => {
+      // setGroupName(username)
+      // setShouldFetchChatID(true);
+      setChat({
+      id: chatId,
+      name: chatName,
+    })
+      // setChatId(chatId);
+      // handleGetChatInfo(chatId)
+      sendMessage(JSON.stringify({
+          channel: "messages",
+          method: "GET",
+          chatId: chatId,
+      }));
   }
 
   const handleOpenMenu = () => {
@@ -89,18 +145,18 @@ const Chat = () => {
   //   setSelectedFile(file); // Update state with the selected file
   // };
 
-  useEffect(() => {
-    if (chatInfo) {
-      if (chatInfo.type === "private"){
-        const [usernameA, usernameB] = chatInfo.members;
-        const chatName = (user_name == usernameA)? usernameB : usernameA;
+  // useEffect(() => {
+  //   if (chatInfo) {
+  //     if (chatInfo.type === "private"){
+  //       const [usernameA, usernameB] = chatInfo.members;
+  //       const chatName = (user_name == usernameA)? usernameB : usernameA;
 
-        setChatName(chatName);
-      } else {
-        setChatName(chatInfo.name)
-      }
-    }
-  }, [chatInfo]);
+  //       setChatName(chatName);
+  //     } else {
+  //       setChatName(chatInfo.name)
+  //     }
+  //   }
+  // }, [chatInfo]);
 
   // useEffect(() => {
   // if (socketData?.message === "Username founded") {
@@ -109,24 +165,19 @@ const Chat = () => {
 
     return(
         <Container>
-            {isMenuOpen && <Menu onClose={() => setIsMenuOpen(false)}/>}
+            {isMenuOpen && <Menu onClose={() => setIsMenuOpen(false)} onClickChat={(chatId, chatName) => handleOpenChat(chatId, chatName)}/>}
             {(!isSmallScreen || !isMenuOpen) &&
               <div className="chat-conatiner">
                 <div className="chat-header">
                   {!isMenuOpen && <MenuIcon src={menu} onClick={() => handleOpenMenu()} title="Open menu"/>}
                   <div className="chat-name">
-                    {chatName && <ChatIcon src={group} />}
-                    <h2>{chatName}</h2>
+                    {chat.name && <ChatIcon src={person} />}
+                    <h2>{chat.name}</h2>
                   </div>
                 </div>
                 <div className="chat">
-                    {Array.isArray(messages) && messages.map((message, index) => (
-                        <div 
-                            className={`message-container ${
-                              message.SenderID === user_id ? 'message-mine' : 'received'
-                            }`}
-                            key={index}
-                          >
+                    {chatMessages?.map((message, index) => (
+                        <div className={`message-container ${message.SenderID === user.id ? 'message-mine' : 'received'}`} key={index}>
                             <div className="message-author"><strong>{message.SenderID}</strong></div>
                             <div className="message-text">{message.Content}</div>
                             <span className="message-time">
@@ -148,8 +199,9 @@ const Chat = () => {
                       <input 
                           type="text" 
                           placeholder="Message" 
-                          value={messageText}
-                          onChange={(e) => setMessageText(e.target.value)} 
+                          ref={messageInputRef}
+                          // value={messageText}
+                          // onChange={(e) => setMessageText(e.target.value)} 
                           onKeyDown={(e) => {
                           if (e.key === 'Enter' && !e.shiftKey) {
                             e.preventDefault();

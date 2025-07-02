@@ -27,7 +27,7 @@ const Add = () => {
     const [selected, setSelected] = useState([]);
     const [searchUser, setSearchUser] = useState('');
 
-    let user_id = localStorage.getItem("user_id");
+    let user = JSON.parse(localStorage.getItem("user"));
 
     useEffect(() => {
         handleGetAllUsers();
@@ -72,7 +72,7 @@ const Add = () => {
         sendMessage(JSON.stringify({
           channel: "user",
           method: "PATCH",
-          _id: user_id,
+          _id: user.id,
           newContact_id: selected[0],
         }));
         showMessage('success', 'Contact added successfully!');
