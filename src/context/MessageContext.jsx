@@ -6,29 +6,29 @@ const MessageContext = createContext();
 
 const MessageProvider = ({ children }) => {
   const [messages, setMessages] = useState([]);
-  const { sendMessage, socketData, connectionStatus } = useSocket('');
+  // const { sendMessage, socketData, connectionStatus } = useSocket('');
 
-  const [chatID, setChatID] = useState(null);
+  // const [chatID, setChatID] = useState(null);
 
-  useEffect(() => {
-    if (chatID && connectionStatus === 'Conectado') {
-      sendMessage(JSON.stringify({
-        channel: "messages",
-        method: "GET",
-        chatId: chatID,
-      }));
-    }
-  }, [chatID, connectionStatus, sendMessage]);
+  // useEffect(() => {
+  //   if (chatID && connectionStatus === 'Conectado') {
+  //     sendMessage(JSON.stringify({
+  //       channel: "messages",
+  //       method: "GET",
+  //       chatId: chatID,
+  //     }));
+  //   }
+  // }, [chatID, connectionStatus, sendMessage]);
 
-  useEffect(() => {
-    if (socketData?.type === "messageList" && Array.isArray(socketData.msg)) {
-      setMessages(socketData.msg);
-      console.log("MESSAGES: ",socketData.msg)
-    }
-    if (socketData?.msg == null && socketData?.type === "messageList"){
-      setMessages([]);
-    }
-  }, [socketData]);
+  // useEffect(() => {
+  //   if (socketData?.type === "messageList" && Array.isArray(socketData.msg)) {
+  //     setMessages(socketData.msg);
+  //     console.log("MESSAGES: ",socketData.msg)
+  //   }
+  //   if (socketData?.msg == null && socketData?.type === "messageList"){
+  //     setMessages([]);
+  //   }
+  // }, [socketData]);
 
   const showMessage = (type, content = null) => {
 
@@ -56,19 +56,19 @@ const MessageProvider = ({ children }) => {
     setMessages((prev) => prev.filter((msg) => msg.id !== id));
   };
 
-  const addMessage = (message) => {
-    setMessages((prev) => [...prev, message]);
-  };
+  // const addMessage = (message) => {
+  //   setMessages((prev) => [...prev, message]);
+  // };
 
   return (
     <MessageContext.Provider value={{ 
       messages, 
       showMessage, 
-      chatID,
-      setChatID,
+      // chatID,
+      // setChatID,
       hideMessage,
-      connectionStatus,
-      addMessage,
+      // connectionStatus,
+      // addMessage,
     }}>
       {children}
     </MessageContext.Provider>

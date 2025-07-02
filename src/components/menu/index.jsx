@@ -21,7 +21,7 @@ import { useSocket } from '../../hooks/useSocket';
 import { useGetChatID } from "../../services/chat/GetChatID";
 import { MessageContext } from "../../context/MessageContext";
 
-const Menu = ({ onClose }) => {
+const Menu = ({ onClose, onClickChat }) => {
 
     let navigate = useNavigate();
 
@@ -31,38 +31,38 @@ const Menu = ({ onClose }) => {
 
     // const searchInputRef = useRef(null);
 
-    let user_id = localStorage.getItem("user_id");
-    let user_name = localStorage.getItem("user_name");
+    let user = JSON.parse(localStorage.getItem("user"));
 
     const dropdownRef = useRef(null);
 
     const [openDropdown, setOpenDropdown] = useState(null);
     const [chats, setChats] = useState([]);
     const [searchChat, setSearchChat] = useState('');
-    const [groupName, setGroupName] = useState(null);
-    const [shouldFetchChatID, setShouldFetchChatID] = useState(false);
+    const [chatName, setChatName] = useState('');
+    // const [groupName, setGroupName] = useState(null);
+    // const [shouldFetchChatID, setShouldFetchChatID] = useState(false);
 
-    const getchatID = useGetChatID(user_name, groupName, shouldFetchChatID);
+    // const getchatID = useGetChatID(user.name, groupName, shouldFetchChatID);
 
-    const { setChatID } = useContext(MessageContext);
+    // const { setChatID } = useContext(MessageContext);
 
     useEffect(() => {
+      const handleClickOutside = (event) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+          setOpenDropdown(null);
+        }
+      };
 
-        const handleClickOutside = (event) => {
-          if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-            setOpenDropdown(null);
-          }
-        };
+      handleGetContacts();
 
-        handleGetContacts();
+      document.addEventListener('mousedown', handleClickOutside);
 
-        document.addEventListener('mousedown', handleClickOutside);
-
-        return () => {
-          document.removeEventListener('mousedown', handleClickOutside);
-        };
+      return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+      };
     }, []);
 
+    // Defini o array de contatos
     useEffect(() => {
       if (socketData?.contacts && Array.isArray(socketData.contacts)) {
         const formattedUsers = socketData.contacts.map(user => ({
@@ -70,51 +70,62 @@ const Menu = ({ onClose }) => {
           username: user.username,
         }));
         setChats(formattedUsers);
-      } else {
-        setChats([]);
+      } else if (socketData?.chat_id) {
+        onClickChat(socketData?.chat_id);
       }
     }, [socketData]);
 
+    // Filtra o chat por nome de usuário
     const filteredChat = chats?.filter((chat) =>
         chat?.username?.toLowerCase().includes(searchChat.toLowerCase())
     );
     
-    useEffect(() => {
-      if (getchatID) {
-        // console.log("Chat ID", getchatID);
-        setChatID(getchatID);
-      }
-    }, [getchatID]);
+    // useEffect(() => {
+    //   if (getchatID) {
+    //     // console.log("Chat ID", getchatID);
+    //     // setChatID(getchatID);
+    //   }
+    // }, [getchatID]);
 
+    // Pega todos os contatos do usuário
     const handleGetContacts = () => {
-        sendMessage(JSON.stringify({
-            channel: "user",
-            method: "GET-contacts",
-            _id: user_id,
-        }));
+      sendMessage(JSON.stringify({
+          channel: "user",
+          method: "GET-contacts",
+          _id: user.id,
+      }));
     }
 
-    const handleOpenChat = (username) => {
-      setGroupName(username)
-      setShouldFetchChatID(true);
+    // Cria uma nova conversa privada
+    const handleAddNewChat = (contact) => {
+      setChatName(contact);
+      sendMessage(JSON.stringify({
+        channel: "chat",
+        method: "POST",
+        type: "private",
+        members: [user.name, contact],
+      }));
     }
 
+    // Liga com a abertura do dropdown
     const handleToggle = (index) => {
       setOpenDropdown((prev) => (prev === index ? null : index));
     };
 
+    // Remove chat
     const handleRemoveChat = (chatId) => {
       sendMessage(JSON.stringify({
         channel: "user",
         method: "DELETE-contact",
-        _id: user_id,
+        _id: user.id,
         contact_id: chatId,
       }));
       handleGetContacts();
     }
 
+    // Realiza logout
     const handleLogout = () => {
-      localStorage.removeItem('user_id');
+      localStorage.removeItem('user');
       navigate("/join");
     }
 
@@ -136,12 +147,14 @@ const Menu = ({ onClose }) => {
               <ul>
                   {filteredChat.length > 0 &&
                     filteredChat?.map((chat, index) => (
-                      <li key={index}>
+                      <li key={index} onClick={() => handleAddNewChat(chat.id, chatName)}>
                           <ChatIcon src={chat.type === "group" ?  group : person}/>
                           <div className="chat-info">
-                            <span onClick={() => handleOpenChat(chat.username)}>{chat.username}</span>
+                            <span>{chat.username}</span>
                             <div ref={openDropdown === index ? dropdownRef : null}>
-                              <MoreIcon src={more} title="More options" onClick={() => handleToggle(index)}/>
+                              <MoreIcon src={more} title="More options" onClick={(e) => {
+                                e.stopPropagation();
+                                handleToggle(index)}}/>
                               {openDropdown === index && (
                                 <Dropdown onClose={() => setOpenDropdown(null)} onClick={() => handleRemoveChat(chat.id)}/>
                               )}

@@ -5,7 +5,7 @@ import { useContext } from "react";
 import { MessageContext } from '../../context/MessageContext';
 
 /* 📁 ASSETS*/
-import { trash, edit } from "../../assets/icons";
+import { trash } from "../../assets/icons";
 
 /* 🎨 STYLES */
 import { Container, ButtonIcon } from "./styles";
@@ -20,22 +20,12 @@ const Dropdown = ({ onClick, onClose }) => {
         showMessage('success', 'Chat removed successfully!');
     }
 
-    // const handleEdit = () => {
-    //     console.log(`Editing chat with ID: ${chatId}`);
-    //     onClose();
-    //     showMessage('warning', 'No chat selected for editing!');
-    // }
-
     return (
         <Container>
             <button onClick={() => handleRemove()}> 
                 <ButtonIcon src={trash} alt="Remove Icon"/>
                 Remover
             </button>
-            {/* <button onClick={() => handleEdit()}>
-                <ButtonIcon src={edit} alt="Remove Icon"/>
-                Editar
-            </button> */}
         </Container>
     )
 }

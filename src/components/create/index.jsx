@@ -29,7 +29,7 @@ const Create = () => {
 
     const groupnameRef = useRef(null);
 
-    let user_id = localStorage.getItem("user_id");
+    let user = JSON.parse(localStorage.getItem("user"));
 
     useEffect(() => {
         handleGetContacts();
@@ -52,14 +52,14 @@ const Create = () => {
       sendMessage(JSON.stringify({
         channel: "user",
         method: "GET-contacts",
-        _id: user_id,
+        _id: user.id,
       }));
     }
 
     const handleAddNewChat = (groupName) => {
       sendMessage(JSON.stringify({
-        channel: "user",
-        method: "GET-contacts",
+        channel: "chat",
+        method: "POST",
         type: "group",
         name: groupName,
         mebers: selected, 
@@ -83,7 +83,7 @@ const Create = () => {
         } else {
           showMessage('error', 'Error creating group.');
         }
-        // closeModal();
+        closeModal();
         setIsLoading(false);
     }
 

@@ -52,8 +52,12 @@ const Join = () => {
 
     const handleLogin = (response) => {
         if (response?.message.toLowerCase() === "username founded") {
-            localStorage.setItem('user_id', response._id);
-            localStorage.setItem('user_name', usernameRef.current.value);
+            console.log(response)
+            const user = {
+                id: response._id,
+                name: usernameRef.current.value
+            };
+            localStorage.setItem('user', JSON.stringify(user));
             navigate("/");
             showMessage('success', 'Successfully login!');
         }
