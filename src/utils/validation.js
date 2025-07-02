@@ -15,3 +15,9 @@ export const validateName = (name) => {
   const regex = /^[A-Za-zÀ-ÿ\s]{2,}$/;
   return regex.test(name.trim());
 };
+
+// Valida nome de grupo (apenas letras e espaços, mínimo 2 letras)
+export const validateGroupName = (name) => {
+  const regex = /^[A-Za-zÀ-ÿ\s]{2,18}$/;
+  return regex.test(name.trim());
+};
