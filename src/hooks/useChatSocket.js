@@ -9,29 +9,28 @@ function toWebSocketUrl(url) {
   return url;
 }
 
-export const useSocket = (path = '') => {
+export const useChatSocket = (chatID, userID) => {
 
-  const [socketData, setSocketData] = useState(null);
+  const [socketChat, setSocketChat] = useState(null);
   const [url, setUrl] = useState(null);
 
   useEffect(() => {
+    if (!chatID || !userID) return;
     // const server = getCurrentServer();
     // if (server) {
-    //   const wsUrl = toWebSocketUrl(server) + '/ws' + path;
-    //     const wsUrl = toWebSocketUrl(server) + '/ws?' + 'chatID=' + chatID + '&userID=' + userID;
-    //   const wsUrl = 'ws://localhost:80/ws'
+    //   const wsUrl = toWebSocketUrl(server) + '/ws?' + 'chatID=' + chatID + '&userID=' + userID;
+    const wsUrl = 'ws://localhost:8080' + '/ws?' + 'chatID=' + chatID + '&userID=' + userID;
+    setUrl(wsUrl);
     // }
-    setUrl('ws://localhost:80/ws');
-  }, );
+  }, [chatID, userID]);
 
   const options = {
-    onOpen: () => console.log(`Connected to App WS 🚀`),
+    onOpen: () => console.log(`Connected to + chatID=${chatID} + '&userID=' + ${userID}`),
     onMessage: (message) => {
       if (!message) return;
       const data = JSON.parse(message.data);
       if (data) {
-        console.log("RECEBIDO DO SOCKET:", data);
-        setSocketData(data);
+        setSocketChat(data);
       }
     },
     onError: (event) => console.error(event),
@@ -39,7 +38,7 @@ export const useSocket = (path = '') => {
     shouldReconnect: () => true,
     reconnectAttempts: 10,
     reconnectInterval: 2000,
-    shouldConnect: Boolean(url), // importante: conecta só se URL existe
+    shouldConnect: Boolean(url), 
   };
 
   const {
@@ -58,11 +57,11 @@ export const useSocket = (path = '') => {
   }[readyState];
 
   return {
-    sendMessage,
+    sendChatMessage: sendMessage,
     lastMessage,
     lastJsonMessage,
     readyState,
     connectionStatus,
-    socketData,
+    socketChat,
   };
 };

@@ -25,6 +25,9 @@ export function useGetChatID(username1, username2, shouldFetch = false) {
   useEffect(() => {
     if (socketData?.chat_id) {
       setChatID(socketData.chat_id);
+
+      // On receive chatID open ws conection
+
     }
   }, [socketData]);
 

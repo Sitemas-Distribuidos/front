@@ -19,12 +19,14 @@ import { Container, SendIcon, ClipIcon, MenuIcon, ChatIcon } from "./styles";
 import { useChatInfo } from "../../hooks/useChatInfo";
 
 import { MessageContext } from "../../context/MessageContext";
+import { ChatContext } from "../../context/ChatContext";
 const mensagens = [
 
 ];
 
 const Chat = () => {
   const { chatID, messages, addMessage } = useContext(MessageContext);
+  const { sendChatMessage } = useContext(ChatContext);
   
   const chatInfo = useChatInfo(chatID);
 
@@ -65,7 +67,7 @@ const Chat = () => {
     };
 
     // Adiciona imediatamente no chat 
-    addMessage(newMessage);
+    addMessage(newMessage); // Concatena com as mensagens ja existente
 
     const message = {
       channel: "messages",
@@ -75,19 +77,13 @@ const Chat = () => {
       content: trimmedMessage,
     };
 
-    sendMessage(JSON.stringify(message));
+    sendChatMessage(JSON.stringify(message)); // Envia a mensagem no chat e para o backend
     setMessageText('');
   }
 
   const handleOpenMenu = () => {
     setIsMenuOpen(true);
   };
-
-  // const handleFileChange = (event) => {
-  // // Get the first file from the selected files list
-  //   const file = event.target.files[0];
-  //   setSelectedFile(file); // Update state with the selected file
-  // };
 
   useEffect(() => {
     if (chatInfo) {
@@ -102,69 +98,67 @@ const Chat = () => {
     }
   }, [chatInfo]);
 
-  // useEffect(() => {
-  // if (socketData?.message === "Username founded") {
-  //   }
-  // }, [socketData]);
-
-    return(
-        <Container>
-            {isMenuOpen && <Menu onClose={() => setIsMenuOpen(false)}/>}
-            {(!isSmallScreen || !isMenuOpen) &&
-              <div className="chat-conatiner">
-                <div className="chat-header">
-                  {!isMenuOpen && <MenuIcon src={menu} onClick={() => handleOpenMenu()} title="Open menu"/>}
-                  <div className="chat-name">
-                    {chatName && <ChatIcon src={group} />}
-                    <h2>{chatName}</h2>
-                  </div>
-                </div>
-                <div className="chat">
-                    {Array.isArray(messages) && messages.map((message, index) => (
-                        <div 
-                            className={`message-container ${
-                              message.SenderID === user_id ? 'message-mine' : 'received'
-                            }`}
-                            key={index}
-                          >
-                            <div className="message-author"><strong>{message.SenderID}</strong></div>
-                            <div className="message-text">{message.Content}</div>
-                            <span className="message-time">
-                              {new Date(message.Created_at).toLocaleTimeString([], {
-                                hour: '2-digit',
-                                minute: '2-digit',
-                              })}
-                            </span>
-                        </div>
-                    ))}
-                    <div ref={messagesEndRef} /> 
-                </div>
-                <div className="input-container">
-                    <div>
-                      <label>
-                        <ClipIcon src={clip} title="Select a file"/>
-                        <input className="hidden-input" type="file" accept="image/*" ref={fileInputRef} />
-                      </label>
-                      <input 
-                          type="text" 
-                          placeholder="Message" 
-                          value={messageText}
-                          onChange={(e) => setMessageText(e.target.value)} 
-                          onKeyDown={(e) => {
-                          if (e.key === 'Enter' && !e.shiftKey) {
-                            e.preventDefault();
-                            handleSubmit();
-                          }
-                        }}/>
-                    </div>
-                    <button onClick={() => handleSubmit()}>
-                        <SendIcon src={send} title="Send message"/>
-                    </button>
+  return(
+      <Container>
+          {isMenuOpen && <Menu onClose={() => setIsMenuOpen(false)}/>}
+          {(!isSmallScreen || !isMenuOpen) &&
+            <div className="chat-conatiner">
+              <div className="chat-header">
+                {!isMenuOpen && <MenuIcon src={menu} onClick={() => handleOpenMenu()} title="Open menu"/>}
+                <div className="chat-name">
+                  {chatName && <ChatIcon src={group} />}
+                  <h2>{chatName}</h2>
                 </div>
               </div>
-            }
-        </Container>
-    );
+              <div className="chat">
+                  {Array.isArray(messages) &&
+                    messages
+                      .filter((message) => message.Content && message.Content.trim() !== "")
+                      .map((message, index) => (
+                        <div 
+                          className={`message-container ${
+                            message.SenderID === user_id ? 'message-mine' : 'received'
+                          }`}
+                          key={index}
+                        >
+                          <div className="message-author"><strong>{message.SenderID}</strong></div>
+                          <div className="message-text">{message.Content}</div>
+                          <span className="message-time">
+                            {new Date(message.Created_at).toLocaleTimeString([], {
+                              hour: '2-digit',
+                              minute: '2-digit',
+                            })}
+                          </span>
+                        </div>
+                    ))}
+                  <div ref={messagesEndRef} /> 
+              </div>
+              <div className="input-container">
+                  <div>
+                    <label>
+                      <ClipIcon src={clip} title="Select a file"/>
+                      <input className="hidden-input" type="file" accept="image/*" ref={fileInputRef} />
+                    </label>
+                    <input 
+                        type="text" 
+                        placeholder="Message" 
+                        value={messageText}
+                        onChange={(e) => setMessageText(e.target.value)} 
+                        onKeyDown={(e) => {
+                        if (e.key === 'Enter' && !e.shiftKey) {
+                          e.preventDefault();
+                          handleSubmit();
+                        }
+                      }}/>
+                  </div>
+                  <button onClick={() => handleSubmit()}>
+                      <SendIcon src={send} title="Send message"/>
+                  </button>
+              </div>
+            </div>
+          }
+      </Container>
+  );
 }
 
 export default Chat;

@@ -11,6 +11,7 @@ import Modal from "./components/modal";
 
 /* 🧠 CONTEXT */
 import { MessageProvider } from "./context/MessageContext";
+import { ChatProvider } from "./context/ChatContext";
 import { ModalProvider } from "./context/ModalContext";
 
 /* 🧭 ROUTES */
@@ -32,11 +33,13 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
     <MessageProvider>
       <ModalProvider>
-        <Container>
-          <Message />
-          <RouterProvider router={router} />
-          <Modal />
-        </Container>
+        <ChatProvider>
+          <Container>
+            <Message />
+            <RouterProvider router={router} />
+            <Modal />
+          </Container>
+        </ChatProvider>
       </ModalProvider>
     </MessageProvider>
   </StrictMode>,
