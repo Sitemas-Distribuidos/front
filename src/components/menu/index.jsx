@@ -25,7 +25,7 @@ const Menu = ({ onClose, onClickChat }) => {
 
     let navigate = useNavigate();
 
-    const { openModal } = useContext(ModalContext);
+    const { modal, openModal } = useContext(ModalContext);
 
     const { sendMessage, socketData } = useSocket();
 
@@ -53,8 +53,6 @@ const Menu = ({ onClose, onClickChat }) => {
         }
       };
 
-      handleGetContacts();
-
       document.addEventListener('mousedown', handleClickOutside);
 
       return () => {
@@ -62,30 +60,31 @@ const Menu = ({ onClose, onClickChat }) => {
       };
     }, []);
 
+    useEffect(() => {
+      if (!modal.isOpen) {
+        handleGetContacts();
+      }
+    }, [modal.isOpen]);
+
     // Defini o array de contatos
     useEffect(() => {
+      console.log(socketData)
       if (socketData?.contacts && Array.isArray(socketData.contacts)) {
         const formattedUsers = socketData.contacts.map(user => ({
           id: user._id,
           username: user.username,
         }));
         setChats(formattedUsers);
-      } else if (socketData?.chat_id) {
-        onClickChat(socketData?.chat_id);
-      }
+      } 
+      // else if (socketData?.chat_id) {
+      //   onClickChat(socketData?.chat_id, chatName);
+      // }
     }, [socketData]);
 
     // Filtra o chat por nome de usuário
     const filteredChat = chats?.filter((chat) =>
-        chat?.username?.toLowerCase().includes(searchChat.toLowerCase())
+      chat?.username?.toLowerCase().includes(searchChat.toLowerCase())
     );
-    
-    // useEffect(() => {
-    //   if (getchatID) {
-    //     // console.log("Chat ID", getchatID);
-    //     // setChatID(getchatID);
-    //   }
-    // }, [getchatID]);
 
     // Pega todos os contatos do usuário
     const handleGetContacts = () => {
@@ -97,13 +96,23 @@ const Menu = ({ onClose, onClickChat }) => {
     }
 
     // Cria uma nova conversa privada
-    const handleAddNewChat = (contact) => {
-      setChatName(contact);
+    // const handleAddNewChat = (contactId, chatUsername) => {
+    //   setChatName(chatUsername);
+    //   sendMessage(JSON.stringify({
+    //     channel: "chat",
+    //     method: "POST",
+    //     type: "private",
+    //     members: [user.name, contactId],
+    //   }));
+    // }
+
+    const handleGetChatId = (contactId) => {
+      console.log('aqui')
       sendMessage(JSON.stringify({
         channel: "chat",
-        method: "POST",
+        method: "GET",
         type: "private",
-        members: [user.name, contact],
+        members: [user.name, contactId],
       }));
     }
 
@@ -147,7 +156,8 @@ const Menu = ({ onClose, onClickChat }) => {
               <ul>
                   {filteredChat.length > 0 &&
                     filteredChat?.map((chat, index) => (
-                      <li key={index} onClick={() => handleAddNewChat(chat.id, chatName)}>
+                      // <li key={index} onClick={() => handleAddNewChat(chat.id, chat.username)}>
+                        <li key={index} onClick={() => handleGetChatId(chat.id, chat.username)}>
                           <ChatIcon src={chat.type === "group" ?  group : person}/>
                           <div className="chat-info">
                             <span>{chat.username}</span>

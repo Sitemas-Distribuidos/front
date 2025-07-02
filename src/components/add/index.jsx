@@ -34,14 +34,14 @@ const Add = () => {
     }, []);
 
     useEffect(() => {
-        if (socketData) {
-           const formattedUsers = socketData.users?.map(user => ({
+        if (socketData?.users) {
+          const formattedUsers = socketData.users.filter(contact => contact.Username !== user.name)
+          .map(user => ({
             id: user.ID,
             name: user.Name,
             username: user.Username,
             email: user.Email,
           }));
-
           setContacts(formattedUsers);
         }
     }, [socketData]);
@@ -51,10 +51,10 @@ const Add = () => {
     );
 
     const handleGetAllUsers = () => {
-        sendMessage(JSON.stringify({
-            channel: "user",
-            method: "GET-all",
-        }));
+      sendMessage(JSON.stringify({
+          channel: "user",
+          method: "GET-all",
+      }));
     }
 
     const handleChange = (index) => {
@@ -66,20 +66,27 @@ const Add = () => {
       }
     }  
 
+    // Adiciona novo contato
+    const handleAddNewContact = () => {
+      sendMessage(JSON.stringify({
+        channel: "user",
+        method: "PATCH",
+        _id: user.id,
+        newContact_id: selected[0],
+      }));
+    }
+
     const handleSubmit = () => {
       setIsLoading(true);
       if (selected.length > 0) {
-        sendMessage(JSON.stringify({
-          channel: "user",
-          method: "PATCH",
-          _id: user.id,
-          newContact_id: selected[0],
-        }));
+        handleAddNewContact();
         showMessage('success', 'Contact added successfully!');
       } else {
         showMessage('error', 'No contacts were added');
       }
-      closeModal();
+      setTimeout(() => {
+        closeModal();
+      }, 50);
       setIsLoading(false);
     }
 

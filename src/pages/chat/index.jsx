@@ -11,7 +11,7 @@ import Menu from "../../components/menu";
 import { useSocket } from '../../hooks/useSocket';
 
 /* 📁 ASSETS*/
-import { send, clip, menu, group } from "../../assets/icons";
+import { send, clip, menu, group, person } from "../../assets/icons";
 
 /* 🎨 STYLES */
 import { Container, SendIcon, ClipIcon, MenuIcon, ChatIcon } from "./styles";
@@ -37,7 +37,7 @@ const Chat = () => {
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   // const [chatName, setChatName] = useState('');
-  const [recipientId, setRecipientId] = useState(null);
+  // const [recipientId, setRecipientId] = useState(null);
   const [chatMessages, setChatMessages] = useState([]);
   // const [messageText, setMessageText] = useState('');
   const messagesEndRef = useRef(null);
@@ -51,9 +51,18 @@ const Chat = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  // useEffect(() => {
-  //     console.log('aquiiiiiiiii:', chatId)
-  // }, [chatId])
+  useEffect(() => {
+      if (socketData?.msg) {
+        const formattedMessage = socketData.msg?.map(message => ({
+            id: message.ID,
+            sender: message.SenderID,
+            content: message.Content,
+            created: message.Created_at,
+          }));
+          console.log(formattedMessage)
+        setChatMessages(formattedMessage)
+      }
+  }, [socketData])
 
   useEffect(() => {
     scrollToBottom();
@@ -66,35 +75,15 @@ const Chat = () => {
     handleSendMessage(trimmedMessage);
     
     const newMessage = {
-      ID: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-      SenderID: user.id,
-      Content: trimmedMessage,
-      Created_at: new Date().toISOString(),
+      id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      sender: user.id,
+      content: trimmedMessage,
+      created: new Date().toISOString(),
     };
 
     setChatMessages((prev) => [...prev, newMessage]);
 
     messageInputRef.current.value = '';
-
-    // // Adiciona imediatamente no chat 
-    // addMessage(newMessage);
-
-    // const addMessage = (message) => {
-    //   setChatMessages((prev) => [...prev, message]);
-    // };
-
-
-    // const message = {
-    //   channel: "messages",
-    //   method: "POST",
-    //   chatId: chatID,
-    //   senderId: user_id,
-    //   content: trimmedMessage,
-    // };
-
-
-    // // sendMessage(JSON.stringify(message));
-    // setMessageText('');
   }
 
   const handleSendMessage = (message) => {
@@ -118,21 +107,24 @@ const Chat = () => {
     }));
   }
 
-  // Abre uma conversa ja existente
-    const handleOpenChat = (chatId, chatName) => {
-      // setGroupName(username)
-      // setShouldFetchChatID(true);
-      setChat({
-      id: chatId,
-      name: chatName,
-    })
-      // setChatId(chatId);
-      // handleGetChatInfo(chatId)
+  // Pega todas as mensagens do chat
+  const handleGetAllChatMessages = (chatId) => {
+    console.log(chatId)
       sendMessage(JSON.stringify({
-          channel: "messages",
-          method: "GET",
-          chatId: chatId,
+        channel: "messages",
+        method: "GET",
+        chatId: chatId,
       }));
+  }
+
+  // Abre conversa
+    const handleOpenChat = (chatId, chatName) => {
+      setChat({
+        id: chatId,
+        name: chatName,
+      });
+
+      handleGetAllChatMessages(chatId);
   }
 
   const handleOpenMenu = () => {
@@ -177,11 +169,11 @@ const Chat = () => {
                 </div>
                 <div className="chat">
                     {chatMessages?.map((message, index) => (
-                        <div className={`message-container ${message.SenderID === user.id ? 'message-mine' : 'received'}`} key={index}>
-                            <div className="message-author"><strong>{message.SenderID}</strong></div>
-                            <div className="message-text">{message.Content}</div>
+                        <div className={`message-container ${message.sender === user.id ? 'message-mine' : 'received'}`} key={index}>
+                            <div className="message-author"><strong>{message.sender}</strong></div>
+                            <div className="message-text">{message.content}</div>
                             <span className="message-time">
-                              {new Date(message.Created_at).toLocaleTimeString([], {
+                              {new Date(message.created).toLocaleTimeString([], {
                                 hour: '2-digit',
                                 minute: '2-digit',
                               })}
@@ -200,8 +192,6 @@ const Chat = () => {
                           type="text" 
                           placeholder="Message" 
                           ref={messageInputRef}
-                          // value={messageText}
-                          // onChange={(e) => setMessageText(e.target.value)} 
                           onKeyDown={(e) => {
                           if (e.key === 'Enter' && !e.shiftKey) {
                             e.preventDefault();
