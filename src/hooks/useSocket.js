@@ -1,31 +1,51 @@
-import { useState } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
+import { getCurrentServer } from '../utils/loadBalancer';
 
-const SOCKET_URL = import.meta.env.VITE_BACKEND_WS;
+function toWebSocketUrl(url) {
+  if (!url) return null;
+  if (url.startsWith('https://')) return url.replace('https://', 'wss://');
+  if (url.startsWith('http://')) return url.replace('http://', 'ws://');
+  return url;
+}
 
 export const useSocket = (path = '') => {
 
   const [socketData, setSocketData] = useState(null);
+  const [url, setUrl] = useState(null);
 
-  const { sendMessage, lastMessage, lastJsonMessage, readyState } = useWebSocket(
-    `${SOCKET_URL}${path}`,
-    {
-      onOpen: () => console.log(`Connected to App WS 🚀`),
-      onMessage: (message) => {
-        if(!message) return;
-        const data = JSON.parse(message.data);
-        if (data) {
-          console.log("RECEBIDO DO SOCKET:",data);
-          setSocketData(data);
-        }
-      },
-      onError: (event) => { console.error(event); },
-      onClose: (close) => { console.log(close); },
-      shouldReconnect: () => true, // reconecta automaticamente
-      reconnectAttempts: 10,
-      reconnectInterval: 2000,
+  useEffect(() => {
+    const server = getCurrentServer();
+    if (server) {
+      const wsUrl = toWebSocketUrl(server) + '/ws' + path;
+      setUrl(wsUrl);
     }
-  );
+  }, [path]);
+
+  const options = {
+    onOpen: () => console.log(`Connected to App WS 🚀`),
+    onMessage: (message) => {
+      if (!message) return;
+      const data = JSON.parse(message.data);
+      if (data) {
+        console.log("RECEBIDO DO SOCKET:", data);
+        setSocketData(data);
+      }
+    },
+    onError: (event) => console.error(event),
+    onClose: (close) => console.log(close),
+    shouldReconnect: () => true,
+    reconnectAttempts: 10,
+    reconnectInterval: 2000,
+    shouldConnect: Boolean(url), // importante: conecta só se URL existe
+  };
+
+  const {
+    sendMessage,
+    lastMessage,
+    lastJsonMessage,
+    readyState,
+  } = useWebSocket(url ?? '', options)
 
   const connectionStatus = {
     [ReadyState.CONNECTING]: 'Conectando...',

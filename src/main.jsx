@@ -20,6 +20,14 @@ import { router } from "./routes";
 import "./index.css";
 import { Container } from "./styles/global";
 
+/* SERVER */
+import { initServerMonitor } from "./utils/loadBalancer";
+
+// Inicializa o monitoramento antes de renderizar
+initServerMonitor((server) => {
+  console.log("Active server:", server);
+});
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <MessageProvider>
