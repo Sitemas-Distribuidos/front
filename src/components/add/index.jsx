@@ -41,7 +41,6 @@ const Add = () => {
             username: user.Username,
             email: user.Email,
           }));
-
           setContacts(formattedUsers);
         }
     }, [socketData]);

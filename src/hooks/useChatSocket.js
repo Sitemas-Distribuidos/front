@@ -25,7 +25,7 @@ export const useChatSocket = (chatID, userID) => {
   }, [chatID, userID]);
 
   const options = {
-    onOpen: () => console.log(`Connected to + chatID=${chatID} + '&userID=' + ${userID}`),
+    // onOpen: () => console.log(`Connected to + chatID=${chatID} + '&userID=' + ${userID}`),
     onMessage: (message) => {
       if (!message) return;
       const data = JSON.parse(message.data);

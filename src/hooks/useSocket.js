@@ -30,7 +30,6 @@ export const useSocket = (path = '') => {
       if (!message) return;
       const data = JSON.parse(message.data);
       if (data) {
-        console.log("RECEBIDO DO SOCKET:", data);
         setSocketData(data);
       }
     },

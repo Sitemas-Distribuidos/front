@@ -23,7 +23,7 @@ const ChatProvider = ({ children, username1, username2 }) => {
         shouldConnect ? chatID : null,
         shouldConnect ? user_id : null
     );
-
+ 
     // Recebe uma mensagem do chat e concatena as mensagens que ja tinha
     useEffect(() => {
         if(socketChat){
@@ -38,28 +38,6 @@ const ChatProvider = ({ children, username1, username2 }) => {
             addMessage(newMessage)
         }
     }, [socketChat]);
-
-    // const showChatMessage = (type, content = null) => {
-
-    //     if (!type || !content) {
-    //     console.error("Type and content are required to show a message.");
-    //     return;
-    //     }
-
-    //     const id = Date.now();
-
-    //     const newMessage = {
-    //     id,
-    //     type,
-    //     content,
-    //     };
-
-    //     setMessages((prev) => [...prev, newMessage]);
-
-    //     setTimeout(() => {
-    //     setMessages((prev) => prev.filter((msg) => msg.id !== id));
-    //     }, 3000);
-    // };
 
     return (
         <ChatContext.Provider value={{ 

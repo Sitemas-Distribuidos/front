@@ -20,6 +20,7 @@ import { Sidebar, CloseIcon, LogoutIcon, ChatIcon, SearchIcon, AddPersonIcon, Ad
 import { useSocket } from '../../hooks/useSocket';
 import { useGetChatID } from "../../services/chat/GetChatID";
 import { MessageContext } from "../../context/MessageContext";
+import { useReload } from "../../context/ReloadChatsContext";
 
 const Menu = ({ onClose }) => {
 
@@ -42,6 +43,8 @@ const Menu = ({ onClose }) => {
     const [groupName, setGroupName] = useState(null);
     const [shouldFetchChatID, setShouldFetchChatID] = useState(false);
 
+    const { reloadGroups, setReloadGroups } = useReload();
+    
     const getchatID = useGetChatID(user_name, groupName, shouldFetchChatID);
 
     const { setChatID } = useContext(MessageContext);
@@ -56,6 +59,8 @@ const Menu = ({ onClose }) => {
 
         handleGetContacts();
 
+        handleGetGroups();
+
         document.addEventListener('mousedown', handleClickOutside);
 
         return () => {
@@ -63,17 +68,48 @@ const Menu = ({ onClose }) => {
         };
     }, []);
 
-    useEffect(() => {
-      if (socketData?.contacts && Array.isArray(socketData.contacts)) {
-        const formattedUsers = socketData.contacts.map(user => ({
-          id: user._id,
-          username: user.username,
-        }));
-        setChats(formattedUsers);
-      } else {
-        setChats([]);
+  useEffect(() => {
+    setChats(prevChats => {
+      let updatedChats = [...prevChats];
+
+    if (Array.isArray(socketData?.contacts)) {
+      const newContacts = socketData.contacts.map(user => ({
+        id: user._id,
+        username: user.username,
+        type: 'private',
+      }));
+
+      const prevContacts = prevChats.filter(chat => chat.type === 'private');
+
+      // Verifica se mudou
+      const contactsChanged = JSON.stringify(prevContacts) !== JSON.stringify(newContacts);
+
+      if (contactsChanged) {
+          updatedChats = updatedChats.filter(chat => chat.type !== 'private');
+          updatedChats = [...updatedChats, ...newContacts];
+        }
       }
-    }, [socketData]);
+
+      if (Array.isArray(socketData?.groups)) {
+        const newGroups = socketData.groups.map(group => ({
+          id: group.id,
+          username: group.name,
+          type: 'group',
+        }));
+        const prevGroups = prevChats.filter(chat => chat.type === 'group');
+
+        const groupsChanged = JSON.stringify(prevGroups) !== JSON.stringify(newGroups);
+
+        if (groupsChanged) {
+          updatedChats = updatedChats.filter(chat => chat.type !== 'group');
+          updatedChats = [...updatedChats, ...newGroups];
+        }
+      }
+
+      return updatedChats;
+    });
+  }, [socketData]);
+
 
     const filteredChat = chats?.filter((chat) =>
         chat?.username?.toLowerCase().includes(searchChat.toLowerCase())
@@ -81,10 +117,16 @@ const Menu = ({ onClose }) => {
     
     useEffect(() => {
       if (getchatID) {
-        // console.log("Chat ID", getchatID);
         setChatID(getchatID);
       }
     }, [getchatID]);
+
+    useEffect(() => {
+      if (reloadGroups) {
+        handleGetGroups();
+        setReloadGroups(false);
+      }
+    }, [reloadGroups]);
 
     const handleGetContacts = () => {
         sendMessage(JSON.stringify({
@@ -94,9 +136,23 @@ const Menu = ({ onClose }) => {
         }));
     }
 
-    const handleOpenChat = (username) => {
-      setGroupName(username)
-      setShouldFetchChatID(true);
+    const handleGetGroups = () => {
+        console.log("Request groups:");
+        sendMessage(JSON.stringify({
+            channel: "user",
+            method: "GET-groups",
+            _id: user_id,
+        }));
+    }
+
+
+    const handleOpenChat = (chat) => {
+      if (chat.type == 'group'){
+        setChatID(chat.id)
+      } else {
+        setGroupName(chat.username)
+        setShouldFetchChatID(true);
+      }
     }
 
     const handleToggle = (index) => {
@@ -139,7 +195,7 @@ const Menu = ({ onClose }) => {
                       <li key={index}>
                           <ChatIcon src={chat.type === "group" ?  group : person}/>
                           <div className="chat-info">
-                            <span onClick={() => handleOpenChat(chat.username)}>{chat.username}</span>
+                            <span onClick={() => handleOpenChat(chat)}>{chat.username}</span>
                             <div ref={openDropdown === index ? dropdownRef : null}>
                               <MoreIcon src={more} title="More options" onClick={() => handleToggle(index)}/>
                               {openDropdown === index && (

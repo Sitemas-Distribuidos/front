@@ -23,7 +23,6 @@ const MessageProvider = ({ children }) => {
   useEffect(() => {
     if (socketData?.type === "messageList" && Array.isArray(socketData.msg)) {
       setMessages(socketData.msg);
-      console.log("MESSAGES: ",socketData.msg)
     }
     if (socketData?.msg == null && socketData?.type === "messageList"){
       setMessages([]);

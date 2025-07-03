@@ -112,26 +112,30 @@ const Chat = () => {
               </div>
               <div className="chat">
                   {Array.isArray(messages) &&
-                    messages
-                      .filter((message) => message.Content && message.Content.trim() !== "")
-                      .map((message, index) => (
-                        <div 
-                          className={`message-container ${
-                            message.SenderID === user_id ? 'message-mine' : 'received'
-                          }`}
-                          key={index}
-                        >
-                          <div className="message-author"><strong>{message.SenderID}</strong></div>
-                          <div className="message-text">{message.Content}</div>
-                          <span className="message-time">
-                            {new Date(message.Created_at).toLocaleTimeString([], {
-                              hour: '2-digit',
-                              minute: '2-digit',
-                            })}
-                          </span>
-                        </div>
-                    ))}
-                  <div ref={messagesEndRef} /> 
+                      messages.filter(message => message.Content && message.Content.trim() !== "").length === 0 ? (
+                        <div className="empty-chat-message">Conversa vazia</div>
+                    ) : (
+                      messages
+                        .filter(message => message.Content && message.Content.trim() !== "")
+                        .map((message, index) => (
+                          <div 
+                            className={`message-container ${
+                              message.SenderID === user_id ? 'message-mine' : 'received'
+                            }`}
+                            key={index}
+                          >
+                            <div className="message-author"><strong>{message.SenderID}</strong></div>
+                            <div className="message-text">{message.Content}</div>
+                            <span className="message-time">
+                              {new Date(message.Created_at).toLocaleTimeString([], {
+                                hour: '2-digit',
+                                minute: '2-digit',
+                              })}
+                            </span>
+                          </div>
+                        ))
+                    )}
+                    <div ref={messagesEndRef} />
               </div>
               <div className="input-container">
                   <div>

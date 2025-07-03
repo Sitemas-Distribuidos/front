@@ -83,6 +83,13 @@ export const Container = styled.div`
                 }
             }
 
+            .empty-chat-message {
+                align-self: center;
+                color: ${colors.primary};
+                font-style: italic;
+                font-size: 0.8rem;
+            }
+
             .message-container {
                 align-self: start;
                 background-color: lightgrey;

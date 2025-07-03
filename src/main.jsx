@@ -13,6 +13,7 @@ import Modal from "./components/modal";
 import { MessageProvider } from "./context/MessageContext";
 import { ChatProvider } from "./context/ChatContext";
 import { ModalProvider } from "./context/ModalContext";
+import { ReloadProvider } from "./context/ReloadChatsContext";
 
 /* 🧭 ROUTES */
 import { router } from "./routes";
@@ -34,11 +35,13 @@ createRoot(document.getElementById('root')).render(
     <MessageProvider>
       <ModalProvider>
         <ChatProvider>
-          <Container>
-            <Message />
-            <RouterProvider router={router} />
-            <Modal />
-          </Container>
+          <ReloadProvider>
+            <Container>
+              <Message />
+              <RouterProvider router={router} />
+              <Modal />
+            </Container>
+          </ReloadProvider>
         </ChatProvider>
       </ModalProvider>
     </MessageProvider>

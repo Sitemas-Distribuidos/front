@@ -14,19 +14,21 @@ import { Container, AddIcon, AddOrRemoveIcon, PersonIcon } from "./styles";
 /* 🔗 SERVICE */
 import { useSocket } from '../../hooks/useSocket';
 import { validateGroupName } from "../../utils/validation";
+import { useReload } from "../../context/ReloadChatsContext";
 
 const Create = () => {
 
     const { closeModal } = useContext(ModalContext);
-    const { showMessage } = useContext(MessageContext);
+    // const { showMessage } = useContext(MessageContext);
 
     const { sendMessage, socketData } = useSocket();
+    const { setReloadGroups } = useReload();
 
     const [contacts, setContacts] = useState([]);
     const [isPlusIcon, setIsPlusIcon] = useState(true);
     const [selected, setSelected] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
-
+    
     const groupnameRef = useRef(null);
 
     let user_id = localStorage.getItem("user_id");
@@ -58,11 +60,11 @@ const Create = () => {
 
     const handleAddNewChat = (groupName) => {
       sendMessage(JSON.stringify({
-        channel: "user",
-        method: "GET-contacts",
+        channel: "chat",
+        method: "POST",
         type: "group",
         name: groupName,
-        mebers: selected, 
+        members: selected, 
       }));
     }
 
@@ -79,9 +81,10 @@ const Create = () => {
         setIsLoading(true);
         if (validateGroupName(groupnameRef.current.value) && selected.length > 0) {
           handleAddNewChat(groupnameRef.current.value);
-          showMessage('success', 'Group created successfully!');
+          setReloadGroups(true); 
+          // showMessage('success', 'Group created successfully!');
         } else {
-          showMessage('error', 'Error creating group.');
+          // showMessage('error', 'Error creating group.');
         }
         // closeModal();
         setIsLoading(false);
