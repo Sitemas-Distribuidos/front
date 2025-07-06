@@ -61,6 +61,7 @@ const Chat = () => {
       SenderID: user_id,
       Content: trimmedMessage,
       Created_at: new Date().toISOString(),
+      Username: user_name,
     };
 
     // Adiciona imediatamente no chat 
@@ -72,6 +73,7 @@ const Chat = () => {
       chatId: chatID,
       senderId: user_id,
       content: trimmedMessage,
+      Username: user_name,
     };
 
     sendChatMessage(JSON.stringify(message)); // Envia a mensagem no chat e para o backend
@@ -121,7 +123,7 @@ const Chat = () => {
                             }`}
                             key={index}
                           >
-                            <div className="message-author"><strong>{message.SenderID}</strong></div>
+                            <div className="message-author"><strong>{message.Username}</strong></div>
                             <div className="message-text">{message.Content}</div>
                             <span className="message-time">
                               {new Date(message.Created_at).toLocaleTimeString([], {
