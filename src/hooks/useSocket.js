@@ -18,10 +18,9 @@ export const useSocket = (path = '') => {
     const server = getCurrentServer();
     if (server) {
       const wsUrl = toWebSocketUrl(server) + '/ws' + path;
-      // const wsUrl = 'ws://localhost:80/ws'
       setUrl(wsUrl);
     }
-  }, );
+  },[]);
 
   const options = {
     // onOpen: () => console.log(`Connected to App WS 🚀`),

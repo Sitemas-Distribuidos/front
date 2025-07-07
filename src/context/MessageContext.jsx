@@ -1,13 +1,13 @@
 /* ⚛ REACT */
 import React, { createContext, useState, useEffect, useContext} from 'react';
-import { useSocket } from '../hooks/useSocket';
+import { WebSocketContext } from './WebSocketContext';
 import { ContactsContext } from './ContactsContext';
 
 const MessageContext = createContext();
 
 const MessageProvider = ({ children }) => {
   const [messages, setMessages] = useState([]);
-  const { sendMessage, socketData, connectionStatus } = useSocket('');
+  const { sendMessage, socketData, connectionStatus } = useContext(WebSocketContext);
   const { contacts } = useContext(ContactsContext);
 
   const [chatID, setChatID] = useState(null);
@@ -56,7 +56,7 @@ const MessageProvider = ({ children }) => {
     }
 
     const id = Date.now();
-
+    
     const newMessage = {
       id,
       type,

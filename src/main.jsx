@@ -15,6 +15,7 @@ import { ChatProvider } from "./context/ChatContext";
 import { ModalProvider } from "./context/ModalContext";
 import { ReloadProvider } from "./context/ReloadChatsContext";
 import { ContactsProvider } from "./context/ContactsContext";
+import { WebSocketProvider } from "./context/WebSocketContext";
 
 /* 🧭 ROUTES */
 import { router } from "./routes";
@@ -32,7 +33,9 @@ initServerMonitor((server) => {
 });
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
+  // <StrictMode>
+    <WebSocketProvider>
+      
     <ContactsProvider>
       <MessageProvider>
         <ModalProvider>
@@ -48,5 +51,6 @@ createRoot(document.getElementById('root')).render(
         </ModalProvider>
       </MessageProvider>
     </ContactsProvider>
-  </StrictMode>,
+    </WebSocketProvider>
+  // </StrictMode>,
 )
