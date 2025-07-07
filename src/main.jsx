@@ -24,33 +24,24 @@ import { router } from "./routes";
 import "./index.css";
 import { Container } from "./styles/global";
 
-/* SERVER */
-import { initServerMonitor } from "./utils/loadBalancer";
-
-// Inicializa o monitoramento antes de renderizar
-initServerMonitor((server) => {
-  console.log("Active server:", server);
-});
-
 createRoot(document.getElementById('root')).render(
   // <StrictMode>
     <WebSocketProvider>
-      
-    <ContactsProvider>
-      <MessageProvider>
-        <ModalProvider>
-          <ChatProvider>
-            <ReloadProvider>
-                <Container>
-                  <Message />
-                  <RouterProvider router={router} />
-                  <Modal />
-                </Container>
-            </ReloadProvider>
-          </ChatProvider>
-        </ModalProvider>
-      </MessageProvider>
-    </ContactsProvider>
+      <ContactsProvider>
+        <MessageProvider>
+          <ModalProvider>
+            <ChatProvider>
+              <ReloadProvider>
+                  <Container>
+                    <Message />
+                    <RouterProvider router={router} />
+                    <Modal />
+                  </Container>
+              </ReloadProvider>
+            </ChatProvider>
+          </ModalProvider>
+        </MessageProvider>
+      </ContactsProvider>
     </WebSocketProvider>
   // </StrictMode>,
 )
